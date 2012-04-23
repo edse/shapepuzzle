@@ -10,7 +10,7 @@ function Game(canvas) {
   this.canvas.height = Math.round(window.innerHeight);
   console.log("canvas: "+this.canvas.width+", "+this.canvas.height)
       
-  this.items_to_load = 3;
+  this.items_to_load = 4;
   this.loaded_items = 0;
   this.loaded = false;
   this.interval = null;
@@ -62,7 +62,6 @@ Game.prototype.loadAssets = function() {
   this.twang.addEventListener('canplaythrough', itemLoaded(this), false);
 
   //AUDIO
-  /*
   this.bgm = document.createElement('audio');
   var source= document.createElement('source');
   if(this.bgm.canPlayType('audio/mpeg;')) {
@@ -75,7 +74,6 @@ Game.prototype.loadAssets = function() {
   this.bgm.appendChild(source);
   this.bgm.addEventListener('canplaythrough', itemLoaded(this), false);
   this.bgm.play();
-  */
   
   //AUDIO
   this.chimes = document.createElement('audio');
