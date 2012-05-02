@@ -185,6 +185,7 @@ Game.prototype.init = function(){
   this.mouse = new Mouse(this);
   
   //001
+  /*
   this.puzzle = new Puzzle("001", this, new Point2D(100,100), new Array(
     new Point2D(0,14),
     new Point2D(89,0),
@@ -194,6 +195,7 @@ Game.prototype.init = function(){
     new Point2D(173,161),
     new Point2D(20,234)
   ));
+  */
   
   //002
   /*
@@ -212,7 +214,6 @@ Game.prototype.init = function(){
   */
 
   //003
-  /*
   this.puzzle = new Puzzle("003", this, new Point2D(100,100), new Array(
     new Point2D(96,0),
     new Point2D(16,23),
@@ -225,7 +226,6 @@ Game.prototype.init = function(){
     new Point2D(142,280),
     new Point2D(40,277)
   ));
-  */
 
 }
 
