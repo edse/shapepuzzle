@@ -77,7 +77,7 @@ window.m.stopGame = function() {
 
 }
 window.m.startGame = function() {
-  gameInterval = setInterval(function() { game.remaining_time--; },1000);
+  gameInterval = setInterval(function() { game.puzzle.remaining_time--; },1000);
   game.started = true;
   //resizeGame();
   window.m.startSFX();
@@ -166,11 +166,45 @@ function loop() {
   game.context.fillText("loaded items: " + game.loaded_items, 50, 100);
   game.context.fillText(">>> " + elapsed, 50, 110);
   game.context.fillText("maxElapsedTime>>> " + game.maxElapsedTime, 50, 120);
-  game.context.fillText(game.remaining_time, 50, 130);
+  game.context.fillText(game.puzzle.remaining_time, 50, 130);
   game.context.fillText("auto-snap: "+game.auto_snap, 50, 140);
 
 }
-function itemLoaded(g){
+
+function loadAssets(g,assets) {
+  //alert('>>'+atttr);
+  for(i=0; i<assets.length; i++){
+    if(assets[i].type == "image"){
+      //IMAGE
+      eval("g."+assets[i].slug+' = new Image();');
+      eval("g."+assets[i].slug+'.src = "'+assets[i].src+'";');
+      eval("g."+assets[i].slug+'.onload = g.loaded_items++;');
+    }
+    else if(assets[i].type == "audio"){
+      //AUDIO
+      eval("g."+assets[i].slug+' = document.createElement(\'audio\');');
+      eval("g."+assets[i].slug+'.addEventListener(\'canplaythrough\', itemLoaded(g), false);');
+      var source= document.createElement('source');
+      if(Modernizr.audio.ogg){
+        source.type= 'audio/ogg';
+        source.src= assets[i].src+'.ogg';
+      }
+      else if(Modernizr.audio.mp3){
+        source.type= 'audio/mpeg';
+        source.src= assets[i].src+'.mp3';
+      }
+      if(source.src != ""){
+        eval("g."+assets[i].slug+'.appendChild(source);');
+      }
+      else{
+        // no MP3 or OGG audio support
+        g.itens_to_load--;
+      }
+    }
+  }
+}
+
+function itemLoaded(g) {
   g.loaded_items++;
 }
 
@@ -188,7 +222,6 @@ function mediaSupport(mimetype, container) {
 //Handle the melody
   if(mediaSupport('audio/ogg; codecs=vorbis', 'audio') ||
     mediaSupport('audio/mpeg', 'audio')) {
-*/
 
 function resizeGame() {
     document.getElementById('canvas').width = window.innerWidth;
@@ -196,6 +229,16 @@ function resizeGame() {
     console.log("canvas: "+window.innerWidth+", "+window.innerHeight)
     //game.init();
 }
+*/
+
+function resizeGame() {  
+  console.log("window: " + window.innerWidth + ", " + window.innerHeight)
+  if(game.started){
+    game.resized = true;
+    game.init();
+  }
+}
+
 
 window.addEventListener('resize', resizeGame, false);
 window.addEventListener('orientationchange', resizeGame, false);

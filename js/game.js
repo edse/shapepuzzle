@@ -9,14 +9,18 @@ function Game(canvas) {
   this.resized = true;
   this.debug = false;
 
+  this.puzzle = new Puzzle("001", this, new Point2D(100,100), new Array());
+
   //init
   this.canvas = document.getElementById('canvas');
   this.context = this.canvas.getContext('2d');
-  
+
   //canvas resize
   this.canvas.width = Math.round(window.innerWidth);
   this.canvas.height = Math.round(window.innerHeight);
   console.log("canvas: "+this.canvas.width+", "+this.canvas.height)
+  this.original_width = this.canvas.width;
+  this.original_height = this.canvas.height;
 
   //size  
   this.font_size = Math.round(this.canvas.width/8);
@@ -36,140 +40,29 @@ function Game(canvas) {
 }
 
 Game.prototype.loadAssets = function() {
-  console.log('start loading...')
+  console.log('start loading...');
   
-  //IMAGE
-  /*
-  this.img = new Image();
-  this.img.src = "img/01.png";
-  this.img.onload = this.loaded_items++;
-
-  //IMAGE
-  this.img_bg = new Image();
-  this.img_bg.src = "img/bg.jpg";
-  this.img_bg.onload = this.loaded_items++;
-  */
-
-  //AUDIO
-  this.drip = document.createElement('audio');
-  var source= document.createElement('source');
-  if(this.drip.canPlayType('audio/mpeg;')) {
-    source.type= 'audio/mpeg';
-    source.src= 'audio/drip.mp3';
-  }else {
-    source.type= 'audio/ogg';
-    source.src= 'audio/drip.ogg';
-  }
-  this.drip.appendChild(source);
-  this.drip.addEventListener('canplaythrough', itemLoaded(this), false);
+  this.assets = Array({
+      type: "audio",
+      src: "audio/drip",
+      slug: "drip"
+    },{
+      type: "audio",
+      src: "audio/twang",
+      slug: "twang"
+    },{
+      type: "audio",
+      src: "audio/01_Alex_Must_Once_Upon_a_Time",
+      slug: "bgm"
+    },{
+      type: "audio",
+      src: "audio/chimes",
+      slug: "chimes"
+    }
+  );
   
-  //AUDIO
-  this.twang = document.createElement('audio');
-  var source= document.createElement('source');
-  if(this.twang.canPlayType('audio/mpeg;')) {
-    source.type= 'audio/mpeg';
-    source.src= 'audio/twang.mp3';
-  }else {
-    source.type= 'audio/ogg';
-    source.src= 'audio/twang.ogg';
-  }
-  this.twang.appendChild(source);
-  this.twang.addEventListener('canplaythrough', itemLoaded(this), false);
-
-  //AUDIO
-  this.bgm = document.createElement('audio');
-  var source= document.createElement('source');
-  if(this.bgm.canPlayType('audio/mpeg;')) {
-    source.type= 'audio/mpeg';
-    source.src= 'audio/01_Alex_Must_Once_Upon_a_Time.mp3';
-  }else {
-    source.type= 'audio/ogg';
-    source.src= 'audio/01_Alex_Must_Once_Upon_a_Time.ogg';
-  }
-  this.bgm.appendChild(source);
-  this.bgm.addEventListener('canplaythrough', itemLoaded(this), false);
-  //this.bgm.play();
-  
-  //AUDIO
-  this.chimes = document.createElement('audio');
-  var source= document.createElement('source');
-  if(this.chimes.canPlayType('audio/mpeg;')) {
-    source.type= 'audio/mpeg';
-    source.src= 'audio/chimes.mp3';
-  }else {
-    source.type= 'audio/ogg';
-    source.src= 'audio/chimes.ogg';
-  }
-  this.chimes.appendChild(source);
-  this.chimes.addEventListener('canplaythrough', itemLoaded(this), false);
-  
-  /*
-  //BUTTON
-  this.full_btn = document.createElement("input");
-  this.full_btn.setAttribute("type", "button");
-  this.full_btn.setAttribute("value", "FULLSCREEN on");
-  this.full_btn.setAttribute("id", "full_btn");
-  this.full_btn.onclick = function() {
-    if(this.value == "FULLSCREEN off"){
-      document.webkitCancelFullScreen();
-      document.mozCancelFullScreen();
-      this.value = "FULLSCREEN on";
-    }else if(this.value == "FULLSCREEN on"){
-      document.getElementById("canvas").webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-      document.getElementById("canvas").mozRequestFullScreen();
-      this.value = "FULLSCREEN off";
-    }
-  };
-  document.getElementById("controls").appendChild(this.full_btn);
-
-  //BUTTON
-  this.bgm_btn = document.createElement("input");
-  this.bgm_btn.setAttribute("type", "button");
-  this.bgm_btn.setAttribute("value", "BGM off");
-  this.bgm_btn.setAttribute("id", "bgm_btn");
-  this.bgm_btn.onclick = function() {
-    if(this.value == "BGM off"){
-      window.m.stopBGM();
-      this.value = "BGM on";
-    }else if(this.value == "BGM on"){
-      window.m.startBGM();
-      this.value = "BGM off";
-    }
-  };
-  document.getElementById("controls").appendChild(this.bgm_btn);
-
-  //BUTTON
-  this.sfx_btn = document.createElement("input");
-  this.sfx_btn.setAttribute("type", "button");
-  this.sfx_btn.setAttribute("value", "SFX off");
-  this.sfx_btn.setAttribute("id", "sfx_btn");
-  this.sfx_btn.onclick = function() {
-    if(this.value == "SFX off"){
-      window.m.stopSFX();
-      this.value = "SFX on";
-    }else if(this.value == "SFX on"){
-      window.m.startSFX();
-      this.value = "SFX off";
-    }
-  };
-  document.getElementById("controls").appendChild(this.sfx_btn);
-
-  //BUTTON
-  this.snap_btn = document.createElement("input");
-  this.snap_btn.setAttribute("type", "button");
-  this.snap_btn.setAttribute("value", "AUTO-SNAP off");
-  this.snap_btn.setAttribute("id", "snap_btn");
-  this.snap_btn.onclick = function() {
-    if(this.value == "AUTO-SNAP off"){
-      window.m.game.auto_snap = false;
-      this.value = "AUTO-SNAP on";
-    }else if(this.value == "AUTO-SNAP on"){
-      window.m.game.auto_snap = true;
-      this.value = "AUTO-SNAP off";
-    }
-  };
-  document.getElementById("controls").appendChild(this.snap_btn);
-  */
+  this.items_to_load = this.assets.length;
+  loadAssets(this, this.assets);
 }
 
 Game.prototype.init = function(){
@@ -177,11 +70,17 @@ Game.prototype.init = function(){
   console.log('initing...')
   clearTimeout(this.iniTimeout);
   
+  /*
   if(window.innerHeight <= 600){
     this.context.scale(0.5,0.5);
     this.scale = 0.5;
   }else
     this.scale = 1;
+  */
+
+  //IMAGE SIZE
+  if(this.resized)
+    this.apply_scale();
 
   this.loaded = true;
   this.auto_snap = true;
@@ -197,53 +96,157 @@ Game.prototype.init = function(){
 
   //console.log(this.img.width+','+this.img.height)
   
-  this.remaining_time = this.num_pieces*30;
-  this.time_to_complete = this.remaining_time;
   this.clock_interval = null;
   this.mouse = new Mouse(this);
   
-  //001
-  this.puzzle = new Puzzle("001", this, new Point2D(100,100), new Array(
-    new Point2D(0,14),
-    new Point2D(89,0),
-    new Point2D(90,34),
-    new Point2D(84,84),
-    new Point2D(56,164),
-    new Point2D(173,161),
-    new Point2D(20,234)
-  ));
-  
-  //002
-  /*
-  this.puzzle = new Puzzle("002", this, new Point2D(100,100), new Array(
-    new Point2D(30,18),
-    new Point2D(0,81),
-    new Point2D(192,5),
-    new Point2D(271,0),
-    new Point2D(271,88),
-    new Point2D(320,164),
-    new Point2D(259,172),
-    new Point2D(184,152),
-    new Point2D(120,138),
-    new Point2D(220,338)
-  ));
-  */
+  this.puzzles = [
+    new Puzzle("001", this, new Point2D(100,100), new Array(
+      new Point2D(0,14),
+      new Point2D(89,0),
+      new Point2D(90,34),
+      new Point2D(84,84),
+      new Point2D(56,164),
+      new Point2D(173,161),
+      new Point2D(20,234))),
+    new Puzzle("002", this, new Point2D(100,100), new Array(
+      new Point2D(30,18),
+      new Point2D(0,81),
+      new Point2D(192,5),
+      new Point2D(271,0),
+      new Point2D(271,88),
+      new Point2D(320,164),
+      new Point2D(259,172),
+      new Point2D(184,152),
+      //new Point2D(120,138),
+      new Point2D(220,338))),
+    new Puzzle("003", this, new Point2D(100,100), new Array(
+      new Point2D(96,0),
+      new Point2D(16,23),
+      new Point2D(97,87),
+      new Point2D(1,145),
+      new Point2D(0,203),
+      new Point2D(55,196),
+      new Point2D(155,209),
+      new Point2D(195,281),
+      new Point2D(142,280),
+      new Point2D(40,277))),
+    new Puzzle("004", this, new Point2D(100,100), new Array(
+      new Point2D(173,0),
+      new Point2D(66,49),
+      new Point2D(0,207),
+      new Point2D(24,286),
+      new Point2D(120,115),
+      new Point2D(115,170))),
+    new Puzzle("005", this, new Point2D(100,100), new Array(
+      new Point2D(40,0),
+      new Point2D(28,37),
+      new Point2D(176,37),
+      new Point2D(0,186),
+      new Point2D(175,179))),
+    new Puzzle("006", this, new Point2D(100,100), new Array(
+      new Point2D(86,0),
+      new Point2D(0,193),
+      new Point2D(166,283),
+      new Point2D(65,127))),
+    new Puzzle("007", this, new Point2D(100,100), new Array(
+      new Point2D(0,61),
+      new Point2D(144,0),
+      new Point2D(27,38),
+      new Point2D(26,58),
+      new Point2D(95,226),
+      new Point2D(193,215))),
+    new Puzzle("008", this, new Point2D(100,100), new Array(
+      new Point2D(28,0),
+      new Point2D(0,257),
+      new Point2D(58,109),
+      new Point2D(185,0))),
+    new Puzzle("009", this, new Point2D(100,100), new Array(
+      new Point2D(79,0),
+      new Point2D(0,118),
+      new Point2D(54,512),
+      new Point2D(294,538),
+      new Point2D(102,346),
+      new Point2D(247,341))),
+    new Puzzle("010", this, new Point2D((this.canvas.width/2-316/2), (this.canvas.height/2-446/2)), new Array(
+      new Point2D(4,0),
+      new Point2D(12,90),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363)))/*,
+    new Puzzle("011", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(53,46),
+      new Point2D(4,227),
+      new Point2D(178,227),
+      new Point2D(88,373),
+      new Point2D(162,363))),
+    new Puzzle("012", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(53,46),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363))),
+    new Puzzle("013", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(12,90),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363))),
+    new Puzzle("014", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(12,90),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363))),
+    new Puzzle("015", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(12,90),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363))),
+    new Puzzle("016", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(12,90),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363))),
+    new Puzzle("017", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(12,90),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363))),
+    new Puzzle("018", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(12,90),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363))),
+    new Puzzle("019", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(12,90),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363))),
+    new Puzzle("020", this, new Point2D(100,100), new Array(
+      new Point2D(4,0),
+      new Point2D(12,90),
+      new Point2D(0,276),
+      new Point2D(162,272),
+      new Point2D(12,363),
+      new Point2D(162,363)))*/
+  ];
 
-  //003
-  /*
-  this.puzzle = new Puzzle("003", this, new Point2D(100,100), new Array(
-    new Point2D(96,0),
-    new Point2D(16,23),
-    new Point2D(97,87),
-    new Point2D(1,145),
-    new Point2D(0,203),
-    new Point2D(55,196),
-    new Point2D(155,209),
-    new Point2D(195,281),
-    new Point2D(142,280),
-    new Point2D(40,277)
-  ));
-  */
+  this.puzzle = this.puzzles[this.stage-1];
 
 }
 
@@ -340,9 +343,10 @@ Game.prototype.draw_remaining = function() {
   this.context.strokeStyle = "rgba(0, 0, 0, 0.5)";
   this.context.lineWidth = 2;
   this.context.font = "bold "+this.font_size+"px Arial";
-  this.context.textBaseline = 'middle';
-  this.context.textAlign = 'center';
-  this.context.fillText(game.remaining_time, this.scaled_width, this.scaled_height);
+  this.context.textBaseline = 'top';
+  this.context.textAlign = 'left';
+  this.context.strokeText(this.puzzle.remaining_time, 10, 30);
+  this.context.fillText(this.puzzle.remaining_time, 10, 30);
 }
 
 Game.prototype.draw_loading = function() {
@@ -357,17 +361,38 @@ Game.prototype.draw_loading = function() {
   this.context.textBaseline = 'middle';
   this.context.textAlign = 'center';
   this.context.lineWidth = 5;
-  this.context.strokeText("LOADING", this.scaled_width, this.scaled_height);
-  this.context.fillText("LOADING", this.scaled_width, this.scaled_height);
+  this.context.strokeText("LOADING", this.canvas.width/2, this.canvas.height/2);
+  this.context.fillText("LOADING", this.canvas.width/2, this.canvas.height/2);
   //console.log('loading...');
 }
 
-////////////////////////////////////////
+Game.prototype.apply_scale = function(){
+  document.getElementById('canvas').width = window.innerWidth;
+  document.getElementById('canvas').height = window.innerHeight;
+  
+  var rw = document.getElementById('canvas').width / this.original_width;
+  var rh = document.getElementById('canvas').height / this.original_height;
+  this.scale = Math.min(rw,rh);
 
-Game.prototype.clockTick = function() {
-  this.remaining_time--;
+  this.context.scale(this.scale,this.scale);
+  console.log('scale: '+this.scale);  
+  this.resized = false;
 }
 
+////////////////////////////////////////
+/*
+Game.prototype.clockTick = function() {
+  this.puzzle.remaining_time--;
+}
+*/
 Game.prototype.getTimer = function() {
   return (new Date().getTime() - this.start_time); //milliseconds
+}
+
+Game.prototype.nextStage = function() {
+  this.is_over = false;
+  this.stage++;
+  this.num_lines++;
+  this.init();
+  window.m.startGame();
 }
