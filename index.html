@@ -4,7 +4,7 @@
 <!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-
+  
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
@@ -104,7 +104,7 @@
           <li>Mouse, keyboard, and touch support</li>
         </ul>
         
-        <p><a id="test" class="btn btn-primary btn-danger" href="javascript: start();/* setTimeOut('$(\'#test\').popover(\'hide\')', 2000); */" rel="popover" data-content="Remember, it is only a test to see what we can easily do with HTML5." data-original-title="This is a test">Play &raquo;</a></p>
+        <p><a id="test" class="btn btn-primary btn-danger" href="javascript: start();setTimeout('$(\'#test\').popover(\'hide\')', 1500);" rel="popover" data-content="Just playing around with HTML5 new features" data-original-title="This is a test">Play &raquo;</a></p>
 
         <p><a href="http://html5videopuzzle.appspot.com">Check this out</a>. It is the same game but using a Youtube video.</p>
         
@@ -175,11 +175,10 @@
     </div>
     <!-- /DEBUG -->
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.2.min.js"><\/script>')</script>
-
+<script src="js/libs/jquery-1.7.2.min.js"></script>
 <script src="js/libs/bootstrap/bootstrap.min.js"></script>
 
+<!-- 
 <script src="js/script.js"></script>
 <script>
   var _gaq=[['_setAccount','UA-31138932-1'],['_trackPageview']];
@@ -187,15 +186,16 @@
   g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
   s.parentNode.insertBefore(g,s)}(document,'script'));
 </script>
-
+ -->
+ 
 <!-- Game scripts -->
-<script src="./js/mouse.js"></script>
-<script src="./js/point2D.js"></script>
-<script src="./js/piece.js"></script>
-<script src="./js/holder.js"></script>
-<script src="./js/puzzle.js"></script>
-<script src="./js/game.js"></script>
-<script src="./js/init.js"></script>
+<script src="./js/mouse.js?a=asdf1"></script>
+<script src="./js/point2D.js?a=asdf1"></script>
+<script src="./js/piece.js?a=asdf1"></script>
+<script src="./js/holder.js?a=asdf1"></script>
+<script src="./js/puzzle.js?a=asdf1"></script>
+<script src="./js/game.js?a=asdf1"></script>
+<script src="./js/init.js?a=asdf1"></script>
 
 </body>
 </html>

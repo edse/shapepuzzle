@@ -100,7 +100,7 @@ Game.prototype.init = function(){
   this.mouse = new Mouse(this);
   
   this.puzzles = [
-    new Puzzle("001", this, new Point2D(100,100), new Array(
+    new Puzzle("001", this, new Point2D((this.canvas.width/2-306/2), (this.canvas.height/2-347/2)-5), new Array(
       new Point2D(0,14),
       new Point2D(89,0),
       new Point2D(90,34),
@@ -108,7 +108,7 @@ Game.prototype.init = function(){
       new Point2D(56,164),
       new Point2D(173,161),
       new Point2D(20,234))),
-    new Puzzle("002", this, new Point2D(100,100), new Array(
+    new Puzzle("002", this, new Point2D((this.canvas.width/2-475/2)+20, (this.canvas.height/2-376/2)+32), new Array(
       new Point2D(30,18),
       new Point2D(0,81),
       new Point2D(192,5),
@@ -117,70 +117,68 @@ Game.prototype.init = function(){
       new Point2D(320,164),
       new Point2D(259,172),
       new Point2D(184,152),
-      //new Point2D(120,138),
-      new Point2D(220,338))),
-    new Puzzle("003", this, new Point2D(100,100), new Array(
+      new Point2D(120,138))),
+    new Puzzle("003", this, new Point2D((this.canvas.width/2-303/2), (this.canvas.height/2-355/2)-5), new Array(
       new Point2D(96,0),
       new Point2D(16,23),
       new Point2D(97,87),
       new Point2D(1,145),
       new Point2D(0,203),
       new Point2D(55,196),
-      new Point2D(155,209),
+      new Point2D(145,209),
       new Point2D(195,281),
       new Point2D(142,280),
       new Point2D(40,277))),
-    new Puzzle("004", this, new Point2D(100,100), new Array(
-      new Point2D(173,0),
-      new Point2D(66,49),
-      new Point2D(0,207),
-      new Point2D(24,286),
-      new Point2D(120,115),
-      new Point2D(115,170))),
-    new Puzzle("005", this, new Point2D(100,100), new Array(
+    new Puzzle("004", this, new Point2D((this.canvas.width/2-467/2), (this.canvas.height/2-333/2)), new Array(
+      new Point2D(0,173),
+      new Point2D(49,66),
+      new Point2D(207.0),
+      new Point2D(286,24),
+      new Point2D(115,120),
+      new Point2D(170,115))),
+    new Puzzle("005", this, new Point2D((this.canvas.width/2-346/2)+2, (this.canvas.height/2-425/2)+5), new Array(
       new Point2D(40,0),
       new Point2D(28,37),
       new Point2D(176,37),
       new Point2D(0,186),
       new Point2D(175,179))),
-    new Puzzle("006", this, new Point2D(100,100), new Array(
-      new Point2D(86,0),
+    new Puzzle("006", this, new Point2D((this.canvas.width/2-298/2)+5, (this.canvas.height/2-400/2)+5), new Array(
+      new Point2D(82,0),
       new Point2D(0,193),
       new Point2D(166,283),
       new Point2D(65,127))),
-    new Puzzle("007", this, new Point2D(100,100), new Array(
+    new Puzzle("007", this, new Point2D((this.canvas.width/2-337/2)+3, (this.canvas.height/2-433/2)+5), new Array(
       new Point2D(0,61),
       new Point2D(144,0),
       new Point2D(27,38),
       new Point2D(26,58),
       new Point2D(95,226),
       new Point2D(193,215))),
-    new Puzzle("008", this, new Point2D(100,100), new Array(
+    new Puzzle("008", this, new Point2D((this.canvas.width/2-427/2)+5, (this.canvas.height/2-433/2)+5), new Array(
       new Point2D(28,0),
       new Point2D(0,257),
       new Point2D(58,109),
       new Point2D(185,0))),
-    new Puzzle("009", this, new Point2D(100,100), new Array(
+    new Puzzle("009", this, new Point2D((this.canvas.width/2-425/2)+5, (this.canvas.height/2-666/2)+10), new Array(
       new Point2D(79,0),
       new Point2D(0,118),
       new Point2D(54,512),
       new Point2D(294,538),
       new Point2D(102,346),
       new Point2D(247,341))),
-    new Puzzle("010", this, new Point2D((this.canvas.width/2-316/2), (this.canvas.height/2-446/2)), new Array(
+    new Puzzle("010", this, new Point2D((this.canvas.width/2-316/2), (this.canvas.height/2-446/2)+2), new Array(
       new Point2D(4,0),
       new Point2D(12,90),
       new Point2D(0,276),
       new Point2D(162,272),
       new Point2D(12,363),
-      new Point2D(162,363)))/*,
+      new Point2D(162,363))),
     new Puzzle("011", this, new Point2D(100,100), new Array(
       new Point2D(4,0),
       new Point2D(53,46),
       new Point2D(4,227),
       new Point2D(178,227),
-      new Point2D(88,373),
-      new Point2D(162,363))),
+      new Point2D(88,373)))/*,
     new Puzzle("012", this, new Point2D(100,100), new Array(
       new Point2D(4,0),
       new Point2D(53,46),
@@ -258,7 +256,8 @@ Game.prototype.render = function() {
   if(!this.loaded){
     if((this.items_to_load > 0)&&(this.loaded_items == this.items_to_load)){
       this.items_to_load = 0;
-      this.iniTimeout = setTimeout("game.init();", 3000);
+      //this.iniTimeout = setTimeout("game.init();", 3000);
+      this.init();
     }else{
       this.draw_loading();
     }

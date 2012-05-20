@@ -63,8 +63,8 @@ Puzzle.prototype.init = function(){
 }
 
 Puzzle.prototype.placePiece = function(id, img, holder){
-  x = Math.floor(Math.random()*(this.game.canvas.width/this.game.scale)/2);
-  y = Math.floor(Math.random()*(this.game.canvas.height/this.game.scale)/2);
+  x = Math.floor(Math.random()*(this.game.canvas.width-img.width));
+  y = Math.floor(Math.random()*(this.game.canvas.height-img.height));
   temp = new Piece(
     id,
     this.game,
@@ -96,8 +96,12 @@ Puzzle.prototype.placeHolder = function(id, img){
 
 Puzzle.prototype.draw = function(){
 
-  if(this.solved)
-    this.game.context.drawImage(this.img, this.pos.x, this.pos.y);
+  if(this.solved){
+    this.game.chimes.play();
+    this.game.context.drawImage(this.img, (this.game.canvas.width/2)-(this.img.width/2), (this.game.canvas.height/2)-(this.img.height/2));
+    this.solved = false;
+  }
+  else{
 
   //HOLDERS
   for(var i = 0; i < this.holders.length; i++){
@@ -166,12 +170,14 @@ Puzzle.prototype.draw = function(){
       $('#pieces').html(this.num_pieces+" pieces in "+(this.time_to_complete-this.remaining_time)+"s");
       $('#modal-success').modal();
     }else{
-      console.log(this.num_pieces+" - "+this.game.placed_pieces.length)
+      //console.log(this.num_pieces+" - "+this.game.placed_pieces.length)
       if(this.num_pieces == this.game.placed_pieces.length){
         this.game.is_over = true;
         this.solved = true;
       }
     }
+  }
+  
   }
 
 }
