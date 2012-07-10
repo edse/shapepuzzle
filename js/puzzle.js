@@ -114,13 +114,15 @@ Puzzle.prototype.draw = function(){
   var over = false;
   for(var i = 0; i < this.pieces.length; i++){
     piece = this.pieces[i];
+    /*
     if(!over && piece.mouse_is_over())
       over = true;
+    */
     if(!piece.placed)
       not_placed.push(piece);
     else if(piece != this.game.selected)
       piece.draw();
-      
+    /*  
     if(over && !this.game.selected){
       if((!this.game.over)||(this.game.over.id < piece.id)||(piece.mouse_is_over())){
         if(piece.mouse_is_over() && !piece.placed){
@@ -128,6 +130,7 @@ Puzzle.prototype.draw = function(){
         }
       }
     }
+    */
     
   }
   

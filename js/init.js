@@ -1,5 +1,6 @@
 // polyfill for animation frame
 ( function() {
+  
   var lastTime = 0;
   var vendors = ['ms', 'moz', 'webkit', 'o'];
   for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
@@ -49,7 +50,7 @@ if(Modernizr.fullscreen){
 var game = new Game();
 var interval = null;
 var gameInterval = null;
-game.debug = false;
+//game.debug = false;
 window.m = {
   game : game
 };
@@ -170,6 +171,7 @@ function loop() {
   game.context.fillText("auto-snap: "+game.auto_snap, 50, 140);
 
 }
+
 
 function loadAssets(g,assets) {
   //alert('>>'+atttr);
