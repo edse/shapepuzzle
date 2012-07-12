@@ -42,7 +42,6 @@ Mouse.prototype.isOverBall = function(ball) {
     if(((this.x >= (ball.x - ball.radius)) && (this.x <= (ball.x + ball.radius)))&&
     ((this.y >= (ball.y - ball.radius)) && (this.y <= (ball.y + ball.radius)))){
       r = true;
-
       if(this.game.debug){
         console.log('over '+this.x+' '+this.y);
       }
@@ -58,7 +57,8 @@ Mouse.prototype.isOverBall = function(ball) {
  *
  *****/
 Mouse.prototype.isOverPiece = function(piece) {
-  console.log('over '+piece.id)
+  if(this.game.debug)
+    console.log('over '+piece.id)
   var poly = new Array();
   poly[0]= new Point2D(piece.position.x, piece.position.y);
   poly[1]= new Point2D(piece.position.x+piece.img.width, piece.position.y);
@@ -149,17 +149,19 @@ Mouse.prototype.onPointerDown = function(e) {
   }
   //test
   var over = false;
-  console.log(this.game.puzzle.pieces.length);
+  if(this.game.debug)
+    console.log(this.game.puzzle.pieces.length);
 
   for(var i = 0; i < this.game.puzzle.pieces.length; i++){
     piece = this.game.puzzle.pieces[i];
-    if(!over && this.isOverPiece(piece))
-      over = true;
-    if(over && !this.game.selected){
-      this.game.over = piece;
-      this.game.selected = this.game.over
+    if(!piece.placed){
+      if(!over && this.isOverPiece(piece))
+        over = true;
+      if(over && !this.game.selected){
+        this.game.over = piece;
+        this.game.selected = this.game.over
+      }
     }
-    
   }
 
   if(this.game.debug){

@@ -9,7 +9,8 @@
  *   constructor
  *
  *****/
-function Puzzle(id, game, pos, positions) {
+function Puzzle(id, game, sound, pos, positions) {
+  console.log(id)
   this.pos = pos;
   this.positions = positions;
   this.num_pieces = positions.length;
@@ -22,6 +23,10 @@ function Puzzle(id, game, pos, positions) {
   this.pieces = new Array();
   this.holders = new Array();
   this.position = null;
+  if(sound){
+    this.has_voice = sound.has_voice;
+    this.has_sound = sound.has_sound;
+  }
   this.loadAssets();
 }
 
@@ -52,7 +57,27 @@ Puzzle.prototype.loadAssets = function() {
     p.onload = this.loaded_items++;
     this.placePiece(i, p, holder);
   }
-
+  
+  //VOICE & SOUNDS
+  var sounds = []
+  if(this.has_voice){
+    sounds.push({
+      type: "audio",
+      src: "img/"+this.id+"/voice",
+      slug: "voice"
+    });
+  }
+  if(this.has_sound){
+    sounds.push({
+      type: "audio",
+      src: "img/"+this.id+"/sound",
+      slug: "sound"
+    });
+  }
+  if(this.has_voice || this.has_sound){
+    this.itens_to_load2 = sounds.length;
+    loadAssetsII(this, sounds);
+  }
 }
 
 Puzzle.prototype.init = function(){
@@ -98,6 +123,10 @@ Puzzle.prototype.draw = function(){
 
   if(this.solved){
     this.game.chimes.play();
+    if(this.has_voice)
+      this.voice.play();
+    if(this.has_sound)
+      this.sound.play();
     this.game.context.drawImage(this.img, (this.game.canvas.width/2)-(this.img.width/2), (this.game.canvas.height/2)-(this.img.height/2));
     this.solved = false;
   }

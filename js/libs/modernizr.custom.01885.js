@@ -496,7 +496,7 @@ window.Modernizr = (function( window, document, undefined ) {
       }
     }
     if (this.mouseEvent) {
-      console.log('m: '+this.mouseEvent.pageX, this.mouseEvent.pageY)
+      //console.log('m: '+this.mouseEvent.pageX, this.mouseEvent.pageY)
       pointers.push(new Pointer(this.mouseEvent.pageX, this.mouseEvent.pageY,
                                   PointerTypes.MOUSE, MOUSE_ID));
     }

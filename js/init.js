@@ -173,7 +173,7 @@ function loop() {
 }
 
 
-function loadAssets(g,assets) {
+function loadAssetsI(g,assets) {
   //alert('>>'+atttr);
   for(i=0; i<assets.length; i++){
     if(assets[i].type == "image"){
@@ -206,8 +206,45 @@ function loadAssets(g,assets) {
   }
 }
 
+function loadAssetsII(g,assets) {
+  //alert('>>'+atttr);
+  for(i=0; i<assets.length; i++){
+    if(assets[i].type == "image"){
+      //IMAGE
+      eval("g."+assets[i].slug+' = new Image();');
+      eval("g."+assets[i].slug+'.src = "'+assets[i].src+'";');
+      eval("g."+assets[i].slug+'.onload = g.loaded_items++;');
+    }
+    else if(assets[i].type == "audio"){
+      //AUDIO
+      eval("g."+assets[i].slug+' = document.createElement(\'audio\');');
+      eval("g."+assets[i].slug+'.addEventListener(\'canplaythrough\', itemLoadedII(g), false);');
+      var source= document.createElement('source');
+      if(Modernizr.audio.ogg){
+        source.type= 'audio/ogg';
+        source.src= assets[i].src+'.ogg';
+      }
+      else if(Modernizr.audio.mp3){
+        source.type= 'audio/mpeg';
+        source.src= assets[i].src+'.mp3';
+      }
+      if(source.src != ""){
+        eval("g."+assets[i].slug+'.appendChild(source);');
+      }
+      else{
+        // no MP3 or OGG audio support
+        g.itens_to_load2--;
+      }
+    }
+  }
+}
+
 function itemLoaded(g) {
   g.loaded_items++;
+}
+
+function itemLoadedII(g) {
+  g.loaded_items2++;
 }
 
 function mediaSupport(mimetype, container) {
