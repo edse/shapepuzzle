@@ -160,6 +160,7 @@ function loop() {
   if(elapsed > game.maxElapsedTime)
     game.maxElapsedTime = elapsed;
 
+  /*
   game.context.textAlign = 'left';
   game.context.fillStyle = "rgba(255, 255, 255, 1)";
   game.context.font = "bold 12px Arial";
@@ -169,6 +170,7 @@ function loop() {
   game.context.fillText("maxElapsedTime>>> " + game.maxElapsedTime, 50, 120);
   game.context.fillText(game.puzzle.remaining_time, 50, 130);
   game.context.fillText("auto-snap: "+game.auto_snap, 50, 140);
+  */
 
 }
 
@@ -272,10 +274,10 @@ function resizeGame() {
 
 function resizeGame() {  
   console.log("window: " + window.innerWidth + ", " + window.innerHeight)
-  if(game.started){
+  //if(game.started){
     game.resized = true;
     game.init();
-  }
+ //}
 }
 
 
@@ -300,7 +302,12 @@ $(function() {
     
   $("#next").click(function() {
     game.nextStage();
-    $('#modal-success').modal('hide');
+    $('#modal-success').fadeOut();
+  });
+
+  $("#test").click(function() {
+    start();
+    setTimeout('$(\'#test\').popover(\'hide\')', 1500);
   });
   
 });
