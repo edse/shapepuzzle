@@ -5,6 +5,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
   
+  <meta http-equiv="expires" content="0">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
@@ -55,7 +56,19 @@
       </div>
     </div>
 
-    <div id="modal-success" class="modal hide fade" style="display: none; ">
+  <div id="modal-success" class="alert" style="display:none; background-color: white; border-radius: 15px; position:absolute; top:45px; right:5px; z-index: 12; opacity: 0.97">
+    <button class="close" onclick="$('#modal-success').fadeOut();">×</button>
+    <h4>Yes, you did it!</h4>
+    <div class="span4" style="padding-top: 10px; margin:0;">
+      <p><span id="stage" class="label label-success">Stage 1 completed!</span></p>
+      <p><span id="pieces" class="label label-warning">4 pieces in 30s</span></p>
+      <hr />
+      <a href="#" class="btn btn-primary" id="next">Next Stage</a>
+    </div>
+  </div>
+  
+  <!--
+    <div id="modal-success2" class="modal hide fade" style="display: none; ">
       <div class="modal-header">
         <button class="close" data-dismiss="modal">×</button>
         <h1>Yes, you did it!</h1>
@@ -63,19 +76,13 @@
       <div class="modal-body">
         <p><span id="stage" class="label label-success">Stage 1 completed!</span></p>
         <p><span id="pieces" class="label label-warning">4 pieces in 30s</span></p>
-        <!--
-        <h4>Popover in a modal</h4>
-        <p>This <a href="#" class="btn popover-test" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">button</a> should trigger a popover on hover.</p>
-        <h4>Tooltips in a modal</h4>
-        <p><a href="#" class="tooltip-test" data-original-title="Tooltip">This link</a> and <a href="#" class="tooltip-test" data-original-title="Tooltip">that link</a> should have tooltips on hover.</p>
-        -->
         <hr />
       </div>
       <div class="modal-footer">
-        <!--<a href="#" class="btn" data-dismiss="modal">No thanks</a>-->
         <a href="#" class="btn btn-primary" id="next">Next Stage</a>
       </div>
     </div>
+  -->
 
 
     <div class="container">
@@ -104,7 +111,7 @@
           <li>Mouse, keyboard, and touch support</li>
         </ul>
         
-        <p><a id="test" class="btn btn-primary btn-danger" href="javascript: start();setTimeout('$(\'#test\').popover(\'hide\')', 1500);" rel="popover" data-content="Just playing around with HTML5 new features" data-original-title="This is a test">Play &raquo;</a></p>
+        <p><a id="test" class="btn btn-primary btn-danger" href="javascript:;" rel="popover" data-content="Just playing around with HTML5 new features" data-original-title="This is a test">Play &raquo;</a></p>
 
         <p><a href="http://html5videopuzzle.appspot.com">Check this out</a>. It is the same game but using a Youtube video.</p>
         
@@ -189,13 +196,13 @@
  -->
  
 <!-- Game scripts -->
-<script src="./js/mouse.js?a=asdf2"></script>
-<script src="./js/point2D.js?a=asdf1"></script>
-<script src="./js/piece.js?a=asdf1"></script>
-<script src="./js/holder.js?a=asdf1"></script>
-<script src="./js/puzzle.js?a=asdf1"></script>
-<script src="./js/game.js?a=asdf13"></script>
-<script src="./js/init.js?a=asdf1"></script>
+<script src="./js/mouse.js"></script>
+<script src="./js/point2D.js"></script>
+<script src="./js/piece.js"></script>
+<script src="./js/holder.js"></script>
+<script src="./js/puzzle.js"></script>
+<script src="./js/game.js"></script>
+<script src="./js/init.js"></script>
 
 
 </body>
