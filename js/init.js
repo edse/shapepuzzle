@@ -299,6 +299,7 @@ function resizeGame() {
   //if(game.started){
     game.resized = true;
     game.init();
+    game.puzle.init();
  //}
 }
 
@@ -323,10 +324,40 @@ $(function() {
   //$('#modal-success').modal();
     
   $("#next").click(function() {
+    if(game.puzzle.has_voice){
+      game.puzzle.voice.pause();
+      game.puzzle.voice.currentTime = 0;
+      $("#btn_voice").removeClass('disabled');
+    }
+    if(game.puzzle.has_sound){
+      game.puzzle.sound.pause();
+      game.puzzle.sound.currentTime = 0;
+      $("#btn_sound").removeClass('disabled');
+    }
     game.nextStage();
     $('#modal-success').fadeOut();
   });
 
+  $("#btn_voice").click(function() {
+    if(game.puzzle.has_voice && !$("#btn_voice").hasClass('disabled')){
+      game.puzzle.voice.addEventListener('ended', function(){
+        $("#btn_voice").removeClass('disabled');
+      });
+      $("#btn_voice").addClass('disabled');
+      game.puzzle.voice.play();
+    }
+  });
+
+  $("#btn_sound").click(function() {
+    if(game.puzzle.has_sound && !$("#btn_sound").hasClass('disabled')){
+      game.puzzle.sound.addEventListener('ended', function(){
+        $("#btn_sound").removeClass('disabled');
+      });
+      $("#btn_sound").addClass('disabled');
+      game.puzzle.sound.play();
+    }
+  });
+  
   $("#test").click(function() {
     start();
     setTimeout('$(\'#test\').popover(\'hide\')', 1500);

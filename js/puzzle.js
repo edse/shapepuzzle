@@ -33,7 +33,6 @@ function Puzzle(id, game, sound, size, pos, positions) {
     this.width = size.width;
     this.height = size.height;
   }
-  this.loadAssets();
 }
 
 Puzzle.prototype.loadAssets = function() {
@@ -67,19 +66,28 @@ Puzzle.prototype.loadAssets = function() {
   //VOICE & SOUNDS
   var sounds = []
   if(this.has_voice){
+    $('#btn_voice').show();
     sounds.push({
       type: "audio",
       src: "img/"+this.id+"/voice",
       slug: "voice"
     });
   }
+  else{
+    $('#btn_voice').hide();
+  }
   if(this.has_sound){
+    $('#btn_sound').show();
     sounds.push({
       type: "audio",
       src: "img/"+this.id+"/sound",
       slug: "sound"
     });
   }
+  else{
+    $('#btn_sound').hide();
+  }
+
   if(this.has_voice || this.has_sound){
     this.itens_to_load2 = sounds.length;
     loadAssetsII(this, sounds);
@@ -87,7 +95,10 @@ Puzzle.prototype.loadAssets = function() {
 }
 
 Puzzle.prototype.init = function(){
-  //console.log('initing puzzle...');
+  console.log('initing puzzle...');
+  this.loaded = false;
+  this.loadAssets();
+  
   clearTimeout(this.iniTimeout);
   this.loaded = true;
   this.solved = false;
@@ -139,8 +150,8 @@ Puzzle.prototype.draw = function(){
     $('#pieces').html(this.num_pieces+" pieces in "+(this.time_to_complete-this.remaining_time)+"s");
     this.solved = false;
     $('#modal-success').fadeIn();
-
     if(!window.m.iOS){
+      /*
       if(this.has_voice && this.has_sound){
         window.m.game.chimes.addEventListener('ended', function(){
           this.currentTime = 0;
@@ -160,6 +171,7 @@ Puzzle.prototype.draw = function(){
           window.m.game.puzzle.voice.play();
         });
       }
+      */
       window.m.game.chimes.play();
     }else{
       window.m.game.drip.src = "/audio/chimes.mp3";

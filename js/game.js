@@ -235,6 +235,7 @@ Game.prototype.init = function(){
   ];
 
   this.puzzle = this.puzzles[this.stage-1];
+  this.puzzle.init();
 
 }
 
