@@ -204,9 +204,14 @@ Mouse.prototype.onPointerUp = function(e) {
     this.game.selected.moveble = false;
     this.game.selected.placed = false;
     //sfx
-    if(this.game.twang.currentTime != 0)
-      this.game.twang.currentTime = 0;
-    this.game.twang.play();
+    if(!window.m.iOS){
+      if(window.m.game.twang.currentTime != 0)
+        window.m.game.twang.currentTime = 0;
+      window.m.game.twang.play();
+    }else{
+      window.m.game.drip.src = "/audio/twang.mp3";
+      window.m.game.drip.play();
+    }
   }
 
   //unselect

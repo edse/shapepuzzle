@@ -389,8 +389,8 @@ Game.prototype.draw_loading = function() {
   this.context.textBaseline = 'middle';
   this.context.textAlign = 'center';
   this.context.lineWidth = 5;
-  this.context.strokeText("LOADING", this.canvas.width/2, this.canvas.height/2);
-  this.context.fillText("LOADING", this.canvas.width/2, this.canvas.height/2);
+  this.context.strokeText("LOADING", (this.canvas.width/this.scale)/2, (this.canvas.height/this.scale)/2);
+  this.context.fillText("LOADING", (this.canvas.width/this.scale)/2, (this.canvas.height/this.scale)/2);
   //console.log('loading...');
 }
 
@@ -399,9 +399,9 @@ Game.prototype.apply_scale = function(){
   var w = this.original_width;
   var h = this.original_height;
   
-  if(this.puzzle != undefined){
-    w = this.puzzle.width;
-    h = this.puzzle.height;
+  if(window.m.game.puzzle.width != undefined){
+    w = window.m.game.puzzle.width*2;
+    h = window.m.game.puzzle.height*2;
   }
 
   document.getElementById('canvas').width = window.innerWidth;
@@ -410,10 +410,14 @@ Game.prototype.apply_scale = function(){
   var rw = document.getElementById('canvas').width / w;
   var rh = document.getElementById('canvas').height / h;
   this.scale = Math.min(rw,rh);
+  //this.scale = rh;
+  //this.scale = 1;
 
   this.context.scale(this.scale,this.scale);
-  console.log('scale: '+this.scale);  
+  //console.log('scale: '+this.scale+' pw: '+w+' cw:'+document.getElementById('canvas').width);  
   this.resized = false;
+  
+  //alert('scale: '+this.scale)
 }
 
 ////////////////////////////////////////

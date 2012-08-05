@@ -1,3 +1,1006 @@
+/*****
+ *
+ *   Point2D.js
+ *
+ *****/
+
+/*****
+ *
+ *   constructor
+ *
+ *****/
+function Point2D(x, y) {
+  if(arguments.length > 0) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+/*****
+ *
+ *   clone
+ *
+ *****/
+Point2D.prototype.clone = function() {
+  return new Point2D(this.x, this.y);
+};
+/*****
+ *
+ *   add
+ *
+ *****/
+Point2D.prototype.add = function(that) {
+  return new Point2D(this.x + that.x, this.y + that.y);
+};
+/*****
+ *
+ *   addEquals
+ *
+ *****/
+Point2D.prototype.addEquals = function(that) {
+  this.x += that.x;
+  this.y += that.y;
+
+  return this;
+};
+/*****
+ *
+ *   offset - used in dom_graph
+ *
+ *   This method is based on code written by Walter Korman
+ *      http://www.go2net.com/internet/deep/1997/05/07/body.html
+ *   which is in turn based on an algorithm by Sven Moen
+ *
+ *****/
+Point2D.prototype.offset = function(a, b) {
+  var result = 0;
+
+  if(!(b.x <= this.x || this.x + a.x <= 0 )) {
+    var t = b.x * a.y - a.x * b.y;
+    var s;
+    var d;
+
+    if(t > 0) {
+      if(this.x < 0) {
+        s = this.x * a.y;
+        d = s / a.x - this.y;
+      } else if(this.x > 0) {
+        s = this.x * b.y;
+        d = s / b.x - this.y
+      } else {
+        d = -this.y;
+      }
+    } else {
+      if(b.x < this.x + a.x) {
+        s = (b.x - this.x ) * a.y;
+        d = b.y - (this.y + s / a.x);
+      } else if(b.x > this.x + a.x) {
+        s = (a.x + this.x) * b.y;
+        d = s / b.x - (this.y + a.y);
+      } else {
+        d = b.y - (this.y + a.y);
+      }
+    }
+
+    if(d > 0) {
+      result = d;
+    }
+  }
+
+  return result;
+};
+/*****
+ *
+ *   rmoveto
+ *
+ *****/
+Point2D.prototype.rmoveto = function(dx, dy) {
+  this.x += dx;
+  this.y += dy;
+};
+/*****
+ *
+ *   scalarAdd
+ *
+ *****/
+Point2D.prototype.scalarAdd = function(scalar) {
+  return new Point2D(this.x + scalar, this.y + scalar);
+};
+/*****
+ *
+ *   scalarAddEquals
+ *
+ *****/
+Point2D.prototype.scalarAddEquals = function(scalar) {
+  this.x += scalar;
+  this.y += scalar;
+
+  return this;
+};
+/*****
+ *
+ *   subtract
+ *
+ *****/
+Point2D.prototype.subtract = function(that) {
+  return new Point2D(this.x - that.x, this.y - that.y);
+};
+/*****
+ *
+ *   subtractEquals
+ *
+ *****/
+Point2D.prototype.subtractEquals = function(that) {
+  this.x -= that.x;
+  this.y -= that.y;
+
+  return this;
+};
+/*****
+ *
+ *   scalarSubtract
+ *
+ *****/
+Point2D.prototype.scalarSubtract = function(scalar) {
+  return new Point2D(this.x - scalar, this.y - scalar);
+};
+/*****
+ *
+ *   scalarSubtractEquals
+ *
+ *****/
+Point2D.prototype.scalarSubtractEquals = function(scalar) {
+  this.x -= scalar;
+  this.y -= scalar;
+
+  return this;
+};
+/*****
+ *
+ *   multiply
+ *
+ *****/
+Point2D.prototype.multiply = function(scalar) {
+  return new Point2D(this.x * scalar, this.y * scalar);
+};
+/*****
+ *
+ *   multiplyEquals
+ *
+ *****/
+Point2D.prototype.multiplyEquals = function(scalar) {
+  this.x *= scalar;
+  this.y *= scalar;
+
+  return this;
+};
+/*****
+ *
+ *   divide
+ *
+ *****/
+Point2D.prototype.divide = function(scalar) {
+  return new Point2D(this.x / scalar, this.y / scalar);
+};
+/*****
+ *
+ *   divideEquals
+ *
+ *****/
+Point2D.prototype.divideEquals = function(scalar) {
+  this.x /= scalar;
+  this.y /= scalar;
+
+  return this;
+};
+/*****
+ *
+ *   comparison methods
+ *
+ *   these were a nice idea, but ...  It would be better to define these names
+ *   in two parts so that the first part is the x comparison and the second is
+ *   the y.  For example, to test p1.x < p2.x and p1.y >= p2.y, you would call
+ *   p1.lt_gte(p2).  Honestly, I only did these types of comparisons in one
+ *   Intersection routine, so these probably could be removed.
+ *
+ *****/
+
+/*****
+ *
+ *   compare
+ *
+ *****/
+Point2D.prototype.compare = function(that) {
+  return (this.x - that.x || this.y - that.y);
+};
+/*****
+ *
+ *   eq - equal
+ *
+ *****/
+Point2D.prototype.eq = function(that) {
+  return (this.x == that.x && this.y == that.y );
+};
+/*****
+ *
+ *   lt - less than
+ *
+ *****/
+Point2D.prototype.lt = function(that) {
+  return (this.x < that.x && this.y < that.y );
+};
+/*****
+ *
+ *   lte - less than or equal
+ *
+ *****/
+Point2D.prototype.lte = function(that) {
+  return (this.x <= that.x && this.y <= that.y );
+};
+/*****
+ *
+ *   gt - greater than
+ *
+ *****/
+Point2D.prototype.gt = function(that) {
+  return (this.x > that.x && this.y > that.y );
+};
+/*****
+ *
+ *   gte - greater than or equal
+ *
+ *****/
+Point2D.prototype.gte = function(that) {
+  return (this.x >= that.x && this.y >= that.y );
+};
+/*****
+ *
+ *   utility methods
+ *
+ *****/
+
+/*****
+ *
+ *   lerp
+ *
+ *****/
+Point2D.prototype.lerp = function(that, t) {
+  return new Point2D(this.x + (that.x - this.x) * t, this.y + (that.y - this.y) * t);
+};
+/*****
+ *
+ *   distanceFrom
+ *
+ *****/
+Point2D.prototype.distanceFrom = function(that) {
+  var dx = this.x - that.x;
+  var dy = this.y - that.y;
+  return Math.sqrt(dx * dx + dy * dy);
+};
+/*****
+ *
+ *   min
+ *
+ *****/
+Point2D.prototype.min = function(that) {
+  return new Point2D(Math.min(this.x, that.x), Math.min(this.y, that.y));
+};
+/*****
+ *
+ *   max
+ *
+ *****/
+Point2D.prototype.max = function(that) {
+  return new Point2D(Math.max(this.x, that.x), Math.max(this.y, that.y));
+};
+/*****
+ *
+ *   toString
+ *
+ *****/
+Point2D.prototype.toString = function() {
+  return this.x + "," + this.y;
+};
+/*****
+ *
+ *   get/set methods
+ *
+ *****/
+
+/*****
+ *
+ *   setXY
+ *
+ *****/
+Point2D.prototype.setXY = function(x, y) {
+  this.x = x;
+  this.y = y;
+};
+/*****
+ *
+ *   setFromPoint
+ *
+ *****/
+Point2D.prototype.setFromPoint = function(that) {
+  this.x = that.x;
+  this.y = that.y;
+};
+/*****
+ *
+ *   swap
+ *
+ *****/
+Point2D.prototype.swap = function(that) {
+  var x = this.x;
+  var y = this.y;
+
+  this.x = that.x;
+  this.y = that.y;
+
+  that.x = x;
+  that.y = y;
+};
+
+
+
+/*****
+ *
+ *   holder.js
+ *
+ *****/
+
+/*****
+ *
+ *   constructor
+ *
+ *****/
+function Holder(id, game, img, position, moveble) {
+  if(arguments.length > 0) {
+    this.id = id;
+    this.game = game;
+    this.img = img;
+    this.position = position;
+    this.moveble = moveble;
+  }
+  else{
+    this.id = 0;
+    this.game = null;
+    this.img = null;
+    this.position = null;
+    this.moveble = null;
+  }
+}
+
+Holder.prototype.draw = function() {
+  /*
+  this.game.context.save();
+  this.game.context.globalAlpha = 0.15
+  this.game.context.fillStyle = "rgba(255, 255, 255, 0.5)";
+  this.game.context.beginPath();
+  */
+  
+  this.game.context.drawImage(this.img, this.position.x, this.position.y);    
+
+  //this.game.context.strokeRect(this.x-this.game.piece_width/2,this.y-this.game.piece_height/2,this.game.piece_width,this.game.piece_height);
+  //this.game.context.fillRect(holder.x-this.piece_width/2,holder.y-this.piece_height/2,this.piece_width,this.piece_height);
+  /*
+  this.game.context.fillStyle = "rgba(0, 0, 0, 0.5)";
+  this.game.context.fillText(this.id, this.x-3, this.y+3);
+  this.game.context.closePath();
+  this.game.context.restore();
+  */
+
+  /*
+  if(this.game.debug)
+    console.log('holder: '+this.id+' drew');
+  */
+
+}
+
+
+
+/*****
+ *
+ *   piece.js
+ *
+ *****/
+
+/*****
+ *
+ *   constructor
+ *
+ *****/
+function Piece(id, game, img, holder, position, initial, moveble, placed) {
+  if(arguments.length > 0) {
+    this.id = id;
+    this.game = game;
+    this.img = img;
+    this.position = position;
+    this.initial = initial;
+    this.holder = holder;
+  }
+  else{
+    this.id = 0;
+    this.game = null;
+    this.img = null;
+    this.position = null;
+    this.initial = null;
+    this.target = null;
+    this.holder = null;
+    this.moveble = false;
+  }
+  
+  //for animation
+  this.m = (holder.position.y - this.y)/(holder.position.x - this.x);
+  this.b = holder.position.y - (this.m * holder.position.x);
+  if(Math.random() >= 0.5)
+    this.p = 0.1;
+  else
+    this.p = -0.1;
+
+  this.tolerance = 200;
+  this.moveble = true;
+  this.moving = false;
+  this.placed = false;
+}
+
+
+Piece.prototype.draw = function() {
+  if((!this.moveble)&&(!this.placed)){
+    this.position.x = this.initial.x;
+    this.position.y = this.initial.y;
+    this.moveble = true;
+
+    /*
+    this.p = this.p*1.1;
+    var x = this.position.x + this.p;
+    var y = this.m * this.position.x + this.b;
+    if((x > this.game.canvas.width-this.img.width) || 
+      (y > this.game.canvas.height-this.img.height) || 
+      (x < this.img.width) || 
+      (y < this.img.height)){
+      this.moveble = true;
+      this.position.x = x;
+      this.position.y = y;
+      this.initial = new Point2D(x,y)
+    }
+    */
+    this.game.context.save();
+    this.game.context.globalAlpha = 1;
+    this.game.context.beginPath();
+    this.game.context.drawImage(this.img, this.position.x, this.position.y);
+  }
+  else{
+    this.game.context.save();
+    
+    if(this.placed)
+      this.game.context.globalAlpha = 1
+    else if(!this.game.is_over)
+      this.game.context.globalAlpha = 0.8
+    else
+      this.game.context.globalAlpha = 1
+  
+    this.game.context.fillStyle = "rgba(255, 255, 255, 0.5)";
+  
+    if(this == this.game.selected){
+      this.game.context.fillStyle = "rgba(0, 0, 255, 0.1)";
+    }
+    else if(this.game.over == this)
+      this.game.context.fillStyle = "rgba(255, 0, 0, 0.1)";
+  
+    //target distance
+    if(this.near() && this == this.game.selected){
+      this.game.context.fillStyle = "rgba(0, 255, 0, 0.1)";
+      if((this.game.auto_snap == true)&&(!this.placed)){
+        //place
+        this.game.selected.position.x = this.game.selected.holder.position.x;
+        this.game.selected.position.y = this.game.selected.holder.position.y;
+        this.game.selected.placed = true;
+        this.game.selected.moveble = false;
+        this.game.placed_pieces.push(this.game.selected);
+        //sfx
+        if(this.game.drip.currentTime != 0)
+          this.game.drip.currentTime = 0;
+        this.game.drip.play();
+      }
+    }
+  
+    //draw
+    this.game.context.beginPath();
+    this.game.context.drawImage(this.img, this.position.x, this.position.y);
+    
+    this.game.context.closePath();
+    this.game.context.restore();
+  }
+  /*
+  if(this.game.debug){
+    console.log('pieace: '+this.id+' drew at: '+this.position.x+', '+this.position.y);
+  }
+  */
+}
+
+Piece.prototype.near = function() {
+  //target distance
+  var r = false
+  var dx = this.position.x - this.holder.position.x;
+  var dy = this.position.y - this.holder.position.y;
+  var distance = (dx * dx + dy * dy);
+  if(distance <= this.tolerance){
+    r = true;
+  }
+  /*
+  if(this.game.debug){
+    console.log(this.id+': '+distance)
+  }
+  */
+  return r;
+}
+
+Piece.prototype.mouse_is_over = function() {
+  return this.game.mouse.isOverPiece(this);
+}
+
+
+
+/*****
+ *
+ *   puzzle.js
+ *
+ *****/
+
+/*****
+ *
+ *   constructor
+ *
+ *****/
+function Puzzle(id, game, sound, size, pos, positions) {
+  
+  console.log(id)
+  console.log(positions)
+  this.pos = pos;
+  this.positions = positions;
+  this.num_pieces = positions.length;
+  this.remaining_time = this.num_pieces*30;
+  this.time_to_complete = this.remaining_time;
+  this.items_to_load = this.num_pieces*2+1;
+  this.loaded_items = 0;
+  this.id = id;
+  this.game = game;
+  this.pieces = new Array();
+  this.holders = new Array();
+  this.position = null;
+  if(sound){
+    this.has_voice = sound.has_voice;
+    this.has_sound = sound.has_sound;
+  }
+  if(size){
+    this.width = size.width;
+    this.height = this.height;
+  }
+  this.loadAssets();
+}
+
+Puzzle.prototype.loadAssets = function() {
+  console.log('puzzle start loading...');
+  //IMAGE
+  this.img = new Image();
+  this.img.src = "img/"+this.id+"/"+this.id+".png";
+  this.img.onload = this.loaded_items++;
+
+  //PIECES & HOLDERS
+  for(i=1; i<=this.num_pieces; i++){
+    //HODLER IMAGE
+    var h = new Image();
+    if(i<10)
+      h.src = "img/"+this.id+"/h0"+i+".png";
+    else
+      h.src = "img/"+this.id+"/h"+i+".png";
+    h.onload = this.loaded_items++;
+    var holder = this.placeHolder(i, h);
+
+    //PIECE IMAGE
+    var p = new Image();
+    if(i<10)
+      p.src = "img/"+this.id+"/p0"+i+".png";
+    else
+      p.src = "img/"+this.id+"/p"+i+".png";
+    p.onload = this.loaded_items++;
+    this.placePiece(i, p, holder);
+  }
+  
+  //VOICE & SOUNDS
+  var sounds = []
+  if(this.has_voice){
+    sounds.push({
+      type: "audio",
+      src: "img/"+this.id+"/voice",
+      slug: "voice"
+    });
+  }
+  if(this.has_sound){
+    sounds.push({
+      type: "audio",
+      src: "img/"+this.id+"/sound",
+      slug: "sound"
+    });
+  }
+  if(this.has_voice || this.has_sound){
+    this.itens_to_load2 = sounds.length;
+    loadAssetsII(this, sounds);
+  }
+}
+
+Puzzle.prototype.init = function(){
+  console.log('initing puzzle...');
+  clearTimeout(this.iniTimeout);
+  this.loaded = true;
+  this.solved = false;
+}
+
+Puzzle.prototype.placePiece = function(id, img, holder){
+  x = Math.floor(Math.random()*(this.game.canvas.width-img.width));
+  y = Math.floor(Math.random()*(this.game.canvas.height-img.height));
+  temp = new Piece(
+    id,
+    this.game,
+    img,
+    holder,
+    new Point2D(x,y),
+    new Point2D(x,y),
+    true,
+    false
+  );
+  this.pieces.push(temp);
+  console.log('puzzle pieces array length>>'+this.pieces.length);
+}
+
+Puzzle.prototype.placeHolder = function(id, img){
+  var x = this.positions[id-1].x+this.pos.x;
+  var y = this.positions[id-1].y+this.pos.y;
+  temp = new Holder(
+    id,
+    this.game,
+    img,
+    new Point2D(x,y),
+    false
+  );
+  this.holders.push(temp);
+  console.log('puzzle holders array length>>'+this.holders.length+' '+temp.position.x+','+temp.position.y);
+  return temp;
+}
+
+Puzzle.prototype.draw = function(){
+
+  if(this.solved){    
+    $('#stage').html("Stage "+this.game.stage+" completed!");
+    $('#pieces').html(this.num_pieces+" pieces in "+(this.time_to_complete-this.remaining_time)+"s");
+    
+    if(!this.has_voice && !this.has_sound){
+      this.game.chimes.play();
+      $('#modal-success').fadeIn();
+    }
+    else if(this.has_voice && this.has_sound){
+      this.game.chimes.addEventListener('ended', function(){
+        this.currentTime = 0;
+        this.pause();
+        window.game.puzzle.voice.play();
+      });
+      this.voice.addEventListener('ended', function(){
+        this.currentTime = 0;
+        this.pause();
+        window.game.puzzle.sound.play();
+        $('#modal-success').fadeIn();
+      });
+      this.game.chimes.play();
+    }
+    else if(this.has_voice && !this.has_sound){
+      this.game.chimes.addEventListener('ended', function(){
+        this.currentTime = 0;
+        this.pause();
+        window.game.puzzle.voice.play();
+        $('#modal-success').fadeIn();
+      });
+      this.game.chimes.play();
+    }
+    this.solved = false;
+  }
+  else{
+    
+    if(this.num_pieces > this.game.placed_pieces.length){
+    
+      //HOLDERS
+      for(var i = 0; i < this.holders.length; i++){
+        this.holders[i].draw();
+      }
+    
+      //PIECES
+      var not_placed = new Array();
+      var over = false;
+      for(var i = 0; i < this.pieces.length; i++){
+        piece = this.pieces[i];
+        if(!piece.placed)
+          not_placed.push(piece);
+        else if(piece != this.game.selected)
+          piece.draw();
+      }
+      
+      if(!over){
+        this.game.over = null;
+      }
+    
+      //move
+      if((this.game.selected != null)&&(this.game.selected.moveble)){
+        this.game.selected.x = this.game.mouse.x;
+        this.game.selected.y = this.game.mouse.y;
+      }
+      
+      //NOT PLACED PIECES  
+      for(var i = 0; i < not_placed.length; i++){
+        not_placed[i].draw();
+      }
+      if(this.game.selected)
+        this.game.selected.draw();
+      
+      //move
+      if((this.game.selected != null)&&(this.game.selected.moveble)){
+        this.game.selected.position.x = this.game.mouse.x-this.game.selected.img.width/2;
+        this.game.selected.position.y = this.game.mouse.y-this.game.selected.img.height/2;
+      }
+      
+      //Game Over
+      if(this.remaining_time <= 0){
+        window.m.stopGame();
+        if(confirm('Timeup! Game Over! Wanna try again?')){
+          this.game.is_over = false;
+          this.game.init();
+          window.m.startGame();
+        }
+      }
+      else{
+        if(!this.game.is_over){
+          //console.log(this.num_pieces+" - "+this.game.placed_pieces.length)
+          if(this.num_pieces == this.game.placed_pieces.length){
+            this.game.is_over = true;
+            this.solved = true;
+          }
+        }
+      }
+    
+    }else{
+      this.game.context.drawImage(this.img, (this.game.canvas.width/2)-(this.img.width/2), (this.game.canvas.height/2)-(this.img.height/2));
+      window.m.pauseGame();
+    }
+  
+  }
+
+}
+
+
+
+
+/*****
+ *
+ *   Mouse.js
+ *
+ *****/
+
+/*****
+ *
+ *   constructor
+ *
+ *****/
+function Mouse(game) {
+  this.game = game;
+  this.x = 0;
+  this.y = 0;
+  this.down = false;
+  this.up = false;
+  var me = this;
+  this.moving = false;
+  this.interval = null;
+  this.touches = [];
+
+  //this.element = window;
+  this.element = document.getElementById('canvas');
+  
+  this.element.addEventListener('pointerdown', function(e){ me.onPointerDown(e) }, false );
+  this.element.addEventListener('pointermove', function(e){ me.onPointerMove(e) }, false );
+  this.element.addEventListener('pointerup', function(e){ me.onPointerUp(e) }, false );
+  
+
+}
+
+/*****
+ *
+ *   isOverBall
+ *    -
+ *
+ *****/
+Mouse.prototype.isOverBall = function(ball) {
+  var r = false;
+  if((this.x > 0 && this.y > 0)&&(ball.x > 0 && ball.y > 0)){
+    if(((this.x >= (ball.x - ball.radius)) && (this.x <= (ball.x + ball.radius)))&&
+    ((this.y >= (ball.y - ball.radius)) && (this.y <= (ball.y + ball.radius)))){
+      r = true;
+      if(this.game.debug){
+        console.log('over '+this.x+' '+this.y);
+      }
+    }
+  }
+  return r;
+}
+
+/*****
+ *
+ *   isOverPiece
+ *    -
+ *
+ *****/
+Mouse.prototype.isOverPiece = function(piece) {
+  if(this.game.debug)
+    console.log('over '+piece.id)
+  var poly = new Array();
+  poly[0]= new Point2D(piece.position.x, piece.position.y);
+  poly[1]= new Point2D(piece.position.x+piece.img.width, piece.position.y);
+  poly[2]= new Point2D(piece.position.x+piece.img.width, piece.position.y+piece.img.height);
+  poly[3]= new Point2D(piece.position.x, piece.position.y+piece.img.height);
+  pt = new Point2D(this.x, this.y);
+  for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+      ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
+      && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
+      && (c = !c);
+  return c;
+}
+
+/*****
+ *
+ *   isOverRect
+ *    -
+ *
+ *****/
+Mouse.prototype.isOverRect = function(p1, p2, p3, p4) {
+  var poly = new Array();
+  poly[0]=p1;
+  poly[1]=p2;
+  poly[2]=p3;
+  poly[3]=p4;
+  pt = new Point2D(this.x, this.y);
+  for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
+      ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
+      && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
+      && (c = !c);
+  return c;
+}
+
+/*****
+ *
+ *   mousemove
+ *
+ *****/
+Mouse.prototype.onPointerMove = function(e) {
+  
+  //this.touches = e.getPointerList();
+  this.touches = e.getPointerList()
+  //console.log('-> '+this.touches[0].x);
+  //for(var i=0; i<touches.length; i++){
+    if(this.touches[0]){
+      var touch = this.touches[0];
+      var xx = touch.x/this.game.scale;
+      var yy = touch.y/this.game.scale;
+      this.x = xx;
+      this.y = yy;
+    }
+//  }
+
+  this.moving = true;
+  window.m.interv();
+  this.x = xx;
+  this.y = yy;
+  this.event = e;
+  
+  if(this.game.debug){
+    console.log('move: '+this.x+', '+this.y);
+  }
+
+}
+
+/*****
+ *
+ *   mousedown
+ *
+ *****/
+Mouse.prototype.onPointerDown = function(e) {
+  this.touches = e.getPointerList()
+  if(this.touches[0]){
+    var touch = this.touches[0];
+    var xx = touch.x/this.game.scale;
+    var yy = touch.y/this.game.scale;
+    this.x = xx;
+    this.y = yy;
+  }
+
+  this.down = true;
+  this.up = false;
+  this.event = e;
+  
+  //select
+  if(this.game.over){
+    this.game.selected = this.game.over;
+  }
+  //test
+  var over = false;
+  if(this.game.debug)
+    console.log(this.game.puzzle.pieces.length);
+
+  for(var i = 0; i < this.game.puzzle.pieces.length; i++){
+    piece = this.game.puzzle.pieces[i];
+    if(!piece.placed){
+      if(!over && this.isOverPiece(piece))
+        over = true;
+      if(over && !this.game.selected){
+        this.game.over = piece;
+        this.game.selected = this.game.over
+      }
+    }
+  }
+
+  if(this.game.debug){
+    console.log('down ('+this.game.over.id+') '+this.x+', '+this.y);
+  }
+}
+
+/*****
+ *
+ *   mouseup
+ *
+ *****/
+Mouse.prototype.onPointerUp = function(e) {
+  this.touches = e.getPointerList()
+  if(this.touches[0]){
+    var touch = this.touches[0];
+    var xx = touch.x/this.game.scale;
+    var yy = touch.y/this.game.scale;
+    this.x = xx;
+    this.y = yy;
+  }
+
+  this.up = true;
+  this.down = false;
+  this.event = e;
+
+  //place
+  if((this.game.selected)&&(this.game.selected.near())&&(!this.game.selected.placed)){
+    this.game.selected.position.x = this.game.selected.holder.position.x;
+    this.game.selected.position.y = this.game.selected.holder.position.y;
+    this.game.selected.placed = true;
+    this.game.selected.moveble = false;
+    this.game.placed_pieces.push(this.game.selected);
+    //sfx
+    if(this.game.drip.currentTime != 0)
+      this.game.drip.currentTime = 0;
+    this.game.drip.play();
+  }else if((this.game.selected)&&(!this.game.selected.near())){
+    this.game.selected.p = 0
+    this.game.selected.moveble = false;
+    this.game.selected.placed = false;
+    //sfx
+    if(this.game.twang.currentTime != 0)
+      this.game.twang.currentTime = 0;
+    this.game.twang.play();
+  }
+
+  //unselect
+  this.game.selected = null;
+
+  if(this.game.debug){
+    console.log('up');
+  }
+
+}
+
+
+
+
 function Game(canvas) {
   this.started = false;
   this.stage = 1;
@@ -430,63 +1433,8 @@ Game.prototype.nextStage = function() {
   this.is_over = false;
   this.stage++;
   this.num_lines++;
-  this.init();
+  window.game.init();
   window.m.startGame();
-}
-
-
-/*****
- *
- *   holder.js
- *
- *****/
-
-/*****
- *
- *   constructor
- *
- *****/
-function Holder(id, game, img, position, moveble) {
-  if(arguments.length > 0) {
-    this.id = id;
-    this.game = game;
-    this.img = img;
-    this.position = position;
-    this.moveble = moveble;
-  }
-  else{
-    this.id = 0;
-    this.game = null;
-    this.img = null;
-    this.position = null;
-    this.moveble = null;
-  }
-}
-
-Holder.prototype.draw = function() {
-  /*
-  this.game.context.save();
-  this.game.context.globalAlpha = 0.15
-  this.game.context.fillStyle = "rgba(255, 255, 255, 0.5)";
-  this.game.context.beginPath();
-  */
-  
-  this.game.context.drawImage(this.img, this.position.x, this.position.y);    
-
-  //this.game.context.strokeRect(this.x-this.game.piece_width/2,this.y-this.game.piece_height/2,this.game.piece_width,this.game.piece_height);
-  //this.game.context.fillRect(holder.x-this.piece_width/2,holder.y-this.piece_height/2,this.piece_width,this.piece_height);
-  /*
-  this.game.context.fillStyle = "rgba(0, 0, 0, 0.5)";
-  this.game.context.fillText(this.id, this.x-3, this.y+3);
-  this.game.context.closePath();
-  this.game.context.restore();
-  */
-
-  /*
-  if(this.game.debug)
-    console.log('holder: '+this.id+' drew');
-  */
-
 }
 
 
@@ -804,945 +1752,3 @@ $(function() {
   });
   
 });
-
-
-/*****
- *
- *   Mouse.js
- *
- *****/
-
-/*****
- *
- *   constructor
- *
- *****/
-function Mouse(game) {
-  this.game = game;
-  this.x = 0;
-  this.y = 0;
-  this.down = false;
-  this.up = false;
-  var me = this;
-  this.moving = false;
-  this.interval = null;
-  this.touches = [];
-
-  //this.element = window;
-  this.element = document.getElementById('canvas');
-  
-  this.element.addEventListener('pointerdown', function(e){ me.onPointerDown(e) }, false );
-  this.element.addEventListener('pointermove', function(e){ me.onPointerMove(e) }, false );
-  this.element.addEventListener('pointerup', function(e){ me.onPointerUp(e) }, false );
-  
-
-}
-
-/*****
- *
- *   isOverBall
- *    -
- *
- *****/
-Mouse.prototype.isOverBall = function(ball) {
-  var r = false;
-  if((this.x > 0 && this.y > 0)&&(ball.x > 0 && ball.y > 0)){
-    if(((this.x >= (ball.x - ball.radius)) && (this.x <= (ball.x + ball.radius)))&&
-    ((this.y >= (ball.y - ball.radius)) && (this.y <= (ball.y + ball.radius)))){
-      r = true;
-      if(this.game.debug){
-        console.log('over '+this.x+' '+this.y);
-      }
-    }
-  }
-  return r;
-}
-
-/*****
- *
- *   isOverPiece
- *    -
- *
- *****/
-Mouse.prototype.isOverPiece = function(piece) {
-  if(this.game.debug)
-    console.log('over '+piece.id)
-  var poly = new Array();
-  poly[0]= new Point2D(piece.position.x, piece.position.y);
-  poly[1]= new Point2D(piece.position.x+piece.img.width, piece.position.y);
-  poly[2]= new Point2D(piece.position.x+piece.img.width, piece.position.y+piece.img.height);
-  poly[3]= new Point2D(piece.position.x, piece.position.y+piece.img.height);
-  pt = new Point2D(this.x, this.y);
-  for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
-      ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
-      && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
-      && (c = !c);
-  return c;
-}
-
-/*****
- *
- *   isOverRect
- *    -
- *
- *****/
-Mouse.prototype.isOverRect = function(p1, p2, p3, p4) {
-  var poly = new Array();
-  poly[0]=p1;
-  poly[1]=p2;
-  poly[2]=p3;
-  poly[3]=p4;
-  pt = new Point2D(this.x, this.y);
-  for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
-      ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
-      && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
-      && (c = !c);
-  return c;
-}
-
-/*****
- *
- *   mousemove
- *
- *****/
-Mouse.prototype.onPointerMove = function(e) {
-  
-  //this.touches = e.getPointerList();
-  this.touches = e.getPointerList()
-  //console.log('-> '+this.touches[0].x);
-  //for(var i=0; i<touches.length; i++){
-    if(this.touches[0]){
-      var touch = this.touches[0];
-      var xx = touch.x/this.game.scale;
-      var yy = touch.y/this.game.scale;
-      this.x = xx;
-      this.y = yy;
-    }
-//  }
-
-  this.moving = true;
-  window.m.interv();
-  this.x = xx;
-  this.y = yy;
-  this.event = e;
-  
-  if(this.game.debug){
-    console.log('move: '+this.x+', '+this.y);
-  }
-
-}
-
-/*****
- *
- *   mousedown
- *
- *****/
-Mouse.prototype.onPointerDown = function(e) {
-  this.touches = e.getPointerList()
-  if(this.touches[0]){
-    var touch = this.touches[0];
-    var xx = touch.x/this.game.scale;
-    var yy = touch.y/this.game.scale;
-    this.x = xx;
-    this.y = yy;
-  }
-
-  this.down = true;
-  this.up = false;
-  this.event = e;
-  
-  //select
-  if(this.game.over){
-    this.game.selected = this.game.over;
-  }
-  //test
-  var over = false;
-  if(this.game.debug)
-    console.log(this.game.puzzle.pieces.length);
-
-  for(var i = 0; i < this.game.puzzle.pieces.length; i++){
-    piece = this.game.puzzle.pieces[i];
-    if(!piece.placed){
-      if(!over && this.isOverPiece(piece))
-        over = true;
-      if(over && !this.game.selected){
-        this.game.over = piece;
-        this.game.selected = this.game.over
-      }
-    }
-  }
-
-  if(this.game.debug){
-    console.log('down ('+this.game.over.id+') '+this.x+', '+this.y);
-  }
-}
-
-/*****
- *
- *   mouseup
- *
- *****/
-Mouse.prototype.onPointerUp = function(e) {
-  this.touches = e.getPointerList()
-  if(this.touches[0]){
-    var touch = this.touches[0];
-    var xx = touch.x/this.game.scale;
-    var yy = touch.y/this.game.scale;
-    this.x = xx;
-    this.y = yy;
-  }
-
-  this.up = true;
-  this.down = false;
-  this.event = e;
-
-  //place
-  if((this.game.selected)&&(this.game.selected.near())&&(!this.game.selected.placed)){
-    this.game.selected.position.x = this.game.selected.holder.position.x;
-    this.game.selected.position.y = this.game.selected.holder.position.y;
-    this.game.selected.placed = true;
-    this.game.selected.moveble = false;
-    this.game.placed_pieces.push(this.game.selected);
-    //sfx
-    if(this.game.drip.currentTime != 0)
-      this.game.drip.currentTime = 0;
-    this.game.drip.play();
-  }else if((this.game.selected)&&(!this.game.selected.near())){
-    this.game.selected.p = 0
-    this.game.selected.moveble = false;
-    this.game.selected.placed = false;
-    //sfx
-    if(this.game.twang.currentTime != 0)
-      this.game.twang.currentTime = 0;
-    this.game.twang.play();
-  }
-
-  //unselect
-  this.game.selected = null;
-
-  if(this.game.debug){
-    console.log('up');
-  }
-
-}
-
-
-/*****
- *
- *   piece.js
- *
- *****/
-
-/*****
- *
- *   constructor
- *
- *****/
-function Piece(id, game, img, holder, position, initial, moveble, placed) {
-  if(arguments.length > 0) {
-    this.id = id;
-    this.game = game;
-    this.img = img;
-    this.position = position;
-    this.initial = initial;
-    this.holder = holder;
-  }
-  else{
-    this.id = 0;
-    this.game = null;
-    this.img = null;
-    this.position = null;
-    this.initial = null;
-    this.target = null;
-    this.holder = null;
-    this.moveble = false;
-  }
-  
-  //for animation
-  this.m = (holder.position.y - this.y)/(holder.position.x - this.x);
-  this.b = holder.position.y - (this.m * holder.position.x);
-  if(Math.random() >= 0.5)
-    this.p = 0.1;
-  else
-    this.p = -0.1;
-
-  this.tolerance = 200;
-  this.moveble = true;
-  this.moving = false;
-  this.placed = false;
-}
-
-
-Piece.prototype.draw = function() {
-  if((!this.moveble)&&(!this.placed)){
-    this.position.x = this.initial.x;
-    this.position.y = this.initial.y;
-    this.moveble = true;
-
-    /*
-    this.p = this.p*1.1;
-    var x = this.position.x + this.p;
-    var y = this.m * this.position.x + this.b;
-    if((x > this.game.canvas.width-this.img.width) || 
-      (y > this.game.canvas.height-this.img.height) || 
-      (x < this.img.width) || 
-      (y < this.img.height)){
-      this.moveble = true;
-      this.position.x = x;
-      this.position.y = y;
-      this.initial = new Point2D(x,y)
-    }
-    */
-    this.game.context.save();
-    this.game.context.globalAlpha = 1;
-    this.game.context.beginPath();
-    this.game.context.drawImage(this.img, this.position.x, this.position.y);
-  }
-  else{
-    this.game.context.save();
-    
-    if(this.placed)
-      this.game.context.globalAlpha = 1
-    else if(!this.game.is_over)
-      this.game.context.globalAlpha = 0.8
-    else
-      this.game.context.globalAlpha = 1
-  
-    this.game.context.fillStyle = "rgba(255, 255, 255, 0.5)";
-  
-    if(this == this.game.selected){
-      this.game.context.fillStyle = "rgba(0, 0, 255, 0.1)";
-    }
-    else if(this.game.over == this)
-      this.game.context.fillStyle = "rgba(255, 0, 0, 0.1)";
-  
-    //target distance
-    if(this.near() && this == this.game.selected){
-      this.game.context.fillStyle = "rgba(0, 255, 0, 0.1)";
-      if((this.game.auto_snap == true)&&(!this.placed)){
-        //place
-        this.game.selected.position.x = this.game.selected.holder.position.x;
-        this.game.selected.position.y = this.game.selected.holder.position.y;
-        this.game.selected.placed = true;
-        this.game.selected.moveble = false;
-        this.game.placed_pieces.push(this.game.selected);
-        //sfx
-        if(this.game.drip.currentTime != 0)
-          this.game.drip.currentTime = 0;
-        this.game.drip.play();
-      }
-    }
-  
-    //draw
-    this.game.context.beginPath();
-    this.game.context.drawImage(this.img, this.position.x, this.position.y);
-    
-    this.game.context.closePath();
-    this.game.context.restore();
-  }
-  /*
-  if(this.game.debug){
-    console.log('pieace: '+this.id+' drew at: '+this.position.x+', '+this.position.y);
-  }
-  */
-}
-
-Piece.prototype.near = function() {
-  //target distance
-  var r = false
-  var dx = this.position.x - this.holder.position.x;
-  var dy = this.position.y - this.holder.position.y;
-  var distance = (dx * dx + dy * dy);
-  if(distance <= this.tolerance){
-    r = true;
-  }
-  /*
-  if(this.game.debug){
-    console.log(this.id+': '+distance)
-  }
-  */
-  return r;
-}
-
-Piece.prototype.mouse_is_over = function() {
-  return this.game.mouse.isOverPiece(this);
-}
-
-
-/*****
- *
- *   Point2D.js
- *
- *****/
-
-/*****
- *
- *   constructor
- *
- *****/
-function Point2D(x, y) {
-  if(arguments.length > 0) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
-/*****
- *
- *   clone
- *
- *****/
-Point2D.prototype.clone = function() {
-  return new Point2D(this.x, this.y);
-};
-/*****
- *
- *   add
- *
- *****/
-Point2D.prototype.add = function(that) {
-  return new Point2D(this.x + that.x, this.y + that.y);
-};
-/*****
- *
- *   addEquals
- *
- *****/
-Point2D.prototype.addEquals = function(that) {
-  this.x += that.x;
-  this.y += that.y;
-
-  return this;
-};
-/*****
- *
- *   offset - used in dom_graph
- *
- *   This method is based on code written by Walter Korman
- *      http://www.go2net.com/internet/deep/1997/05/07/body.html
- *   which is in turn based on an algorithm by Sven Moen
- *
- *****/
-Point2D.prototype.offset = function(a, b) {
-  var result = 0;
-
-  if(!(b.x <= this.x || this.x + a.x <= 0 )) {
-    var t = b.x * a.y - a.x * b.y;
-    var s;
-    var d;
-
-    if(t > 0) {
-      if(this.x < 0) {
-        s = this.x * a.y;
-        d = s / a.x - this.y;
-      } else if(this.x > 0) {
-        s = this.x * b.y;
-        d = s / b.x - this.y
-      } else {
-        d = -this.y;
-      }
-    } else {
-      if(b.x < this.x + a.x) {
-        s = (b.x - this.x ) * a.y;
-        d = b.y - (this.y + s / a.x);
-      } else if(b.x > this.x + a.x) {
-        s = (a.x + this.x) * b.y;
-        d = s / b.x - (this.y + a.y);
-      } else {
-        d = b.y - (this.y + a.y);
-      }
-    }
-
-    if(d > 0) {
-      result = d;
-    }
-  }
-
-  return result;
-};
-/*****
- *
- *   rmoveto
- *
- *****/
-Point2D.prototype.rmoveto = function(dx, dy) {
-  this.x += dx;
-  this.y += dy;
-};
-/*****
- *
- *   scalarAdd
- *
- *****/
-Point2D.prototype.scalarAdd = function(scalar) {
-  return new Point2D(this.x + scalar, this.y + scalar);
-};
-/*****
- *
- *   scalarAddEquals
- *
- *****/
-Point2D.prototype.scalarAddEquals = function(scalar) {
-  this.x += scalar;
-  this.y += scalar;
-
-  return this;
-};
-/*****
- *
- *   subtract
- *
- *****/
-Point2D.prototype.subtract = function(that) {
-  return new Point2D(this.x - that.x, this.y - that.y);
-};
-/*****
- *
- *   subtractEquals
- *
- *****/
-Point2D.prototype.subtractEquals = function(that) {
-  this.x -= that.x;
-  this.y -= that.y;
-
-  return this;
-};
-/*****
- *
- *   scalarSubtract
- *
- *****/
-Point2D.prototype.scalarSubtract = function(scalar) {
-  return new Point2D(this.x - scalar, this.y - scalar);
-};
-/*****
- *
- *   scalarSubtractEquals
- *
- *****/
-Point2D.prototype.scalarSubtractEquals = function(scalar) {
-  this.x -= scalar;
-  this.y -= scalar;
-
-  return this;
-};
-/*****
- *
- *   multiply
- *
- *****/
-Point2D.prototype.multiply = function(scalar) {
-  return new Point2D(this.x * scalar, this.y * scalar);
-};
-/*****
- *
- *   multiplyEquals
- *
- *****/
-Point2D.prototype.multiplyEquals = function(scalar) {
-  this.x *= scalar;
-  this.y *= scalar;
-
-  return this;
-};
-/*****
- *
- *   divide
- *
- *****/
-Point2D.prototype.divide = function(scalar) {
-  return new Point2D(this.x / scalar, this.y / scalar);
-};
-/*****
- *
- *   divideEquals
- *
- *****/
-Point2D.prototype.divideEquals = function(scalar) {
-  this.x /= scalar;
-  this.y /= scalar;
-
-  return this;
-};
-/*****
- *
- *   comparison methods
- *
- *   these were a nice idea, but ...  It would be better to define these names
- *   in two parts so that the first part is the x comparison and the second is
- *   the y.  For example, to test p1.x < p2.x and p1.y >= p2.y, you would call
- *   p1.lt_gte(p2).  Honestly, I only did these types of comparisons in one
- *   Intersection routine, so these probably could be removed.
- *
- *****/
-
-/*****
- *
- *   compare
- *
- *****/
-Point2D.prototype.compare = function(that) {
-  return (this.x - that.x || this.y - that.y);
-};
-/*****
- *
- *   eq - equal
- *
- *****/
-Point2D.prototype.eq = function(that) {
-  return (this.x == that.x && this.y == that.y );
-};
-/*****
- *
- *   lt - less than
- *
- *****/
-Point2D.prototype.lt = function(that) {
-  return (this.x < that.x && this.y < that.y );
-};
-/*****
- *
- *   lte - less than or equal
- *
- *****/
-Point2D.prototype.lte = function(that) {
-  return (this.x <= that.x && this.y <= that.y );
-};
-/*****
- *
- *   gt - greater than
- *
- *****/
-Point2D.prototype.gt = function(that) {
-  return (this.x > that.x && this.y > that.y );
-};
-/*****
- *
- *   gte - greater than or equal
- *
- *****/
-Point2D.prototype.gte = function(that) {
-  return (this.x >= that.x && this.y >= that.y );
-};
-/*****
- *
- *   utility methods
- *
- *****/
-
-/*****
- *
- *   lerp
- *
- *****/
-Point2D.prototype.lerp = function(that, t) {
-  return new Point2D(this.x + (that.x - this.x) * t, this.y + (that.y - this.y) * t);
-};
-/*****
- *
- *   distanceFrom
- *
- *****/
-Point2D.prototype.distanceFrom = function(that) {
-  var dx = this.x - that.x;
-  var dy = this.y - that.y;
-  return Math.sqrt(dx * dx + dy * dy);
-};
-/*****
- *
- *   min
- *
- *****/
-Point2D.prototype.min = function(that) {
-  return new Point2D(Math.min(this.x, that.x), Math.min(this.y, that.y));
-};
-/*****
- *
- *   max
- *
- *****/
-Point2D.prototype.max = function(that) {
-  return new Point2D(Math.max(this.x, that.x), Math.max(this.y, that.y));
-};
-/*****
- *
- *   toString
- *
- *****/
-Point2D.prototype.toString = function() {
-  return this.x + "," + this.y;
-};
-/*****
- *
- *   get/set methods
- *
- *****/
-
-/*****
- *
- *   setXY
- *
- *****/
-Point2D.prototype.setXY = function(x, y) {
-  this.x = x;
-  this.y = y;
-};
-/*****
- *
- *   setFromPoint
- *
- *****/
-Point2D.prototype.setFromPoint = function(that) {
-  this.x = that.x;
-  this.y = that.y;
-};
-/*****
- *
- *   swap
- *
- *****/
-Point2D.prototype.swap = function(that) {
-  var x = this.x;
-  var y = this.y;
-
-  this.x = that.x;
-  this.y = that.y;
-
-  that.x = x;
-  that.y = y;
-};
-
-
-
-/*****
- *
- *   puzzle.js
- *
- *****/
-
-/*****
- *
- *   constructor
- *
- *****/
-function Puzzle(id, game, sound, size, pos, positions) {
-  
-  console.log(id)
-  console.log(positions)
-  this.pos = pos;
-  this.positions = positions;
-  this.num_pieces = positions.length;
-  this.remaining_time = this.num_pieces*30;
-  this.time_to_complete = this.remaining_time;
-  this.items_to_load = this.num_pieces*2+1;
-  this.loaded_items = 0;
-  this.id = id;
-  this.game = game;
-  this.pieces = new Array();
-  this.holders = new Array();
-  this.position = null;
-  if(sound){
-    this.has_voice = sound.has_voice;
-    this.has_sound = sound.has_sound;
-  }
-  if(size){
-    this.width = size.width;
-    this.height = this.height;
-  }
-  this.loadAssets();
-}
-
-Puzzle.prototype.loadAssets = function() {
-  console.log('puzzle start loading...');
-  //IMAGE
-  this.img = new Image();
-  this.img.src = "img/"+this.id+"/"+this.id+".png";
-  this.img.onload = this.loaded_items++;
-
-  //PIECES & HOLDERS
-  for(i=1; i<=this.num_pieces; i++){
-    //HODLER IMAGE
-    var h = new Image();
-    if(i<10)
-      h.src = "img/"+this.id+"/h0"+i+".png";
-    else
-      h.src = "img/"+this.id+"/h"+i+".png";
-    h.onload = this.loaded_items++;
-    var holder = this.placeHolder(i, h);
-
-    //PIECE IMAGE
-    var p = new Image();
-    if(i<10)
-      p.src = "img/"+this.id+"/p0"+i+".png";
-    else
-      p.src = "img/"+this.id+"/p"+i+".png";
-    p.onload = this.loaded_items++;
-    this.placePiece(i, p, holder);
-  }
-  
-  //VOICE & SOUNDS
-  var sounds = []
-  if(this.has_voice){
-    sounds.push({
-      type: "audio",
-      src: "img/"+this.id+"/voice",
-      slug: "voice"
-    });
-  }
-  if(this.has_sound){
-    sounds.push({
-      type: "audio",
-      src: "img/"+this.id+"/sound",
-      slug: "sound"
-    });
-  }
-  if(this.has_voice || this.has_sound){
-    this.itens_to_load2 = sounds.length;
-    loadAssetsII(this, sounds);
-  }
-}
-
-Puzzle.prototype.init = function(){
-  console.log('initing puzzle...');
-  clearTimeout(this.iniTimeout);
-  this.loaded = true;
-  this.solved = false;
-}
-
-Puzzle.prototype.placePiece = function(id, img, holder){
-  x = Math.floor(Math.random()*(this.game.canvas.width-img.width));
-  y = Math.floor(Math.random()*(this.game.canvas.height-img.height));
-  temp = new Piece(
-    id,
-    this.game,
-    img,
-    holder,
-    new Point2D(x,y),
-    new Point2D(x,y),
-    true,
-    false
-  );
-  this.pieces.push(temp);
-  console.log('puzzle pieces array length>>'+this.pieces.length);
-}
-
-Puzzle.prototype.placeHolder = function(id, img){
-  var x = this.positions[id-1].x+this.pos.x;
-  var y = this.positions[id-1].y+this.pos.y;
-  temp = new Holder(
-    id,
-    this.game,
-    img,
-    new Point2D(x,y),
-    false
-  );
-  this.holders.push(temp);
-  console.log('puzzle holders array length>>'+this.holders.length+' '+temp.position.x+','+temp.position.y);
-  return temp;
-}
-
-Puzzle.prototype.draw = function(){
-
-  if(this.solved){    
-    $('#stage').html("Stage "+this.game.stage+" completed!");
-    $('#pieces').html(this.num_pieces+" pieces in "+(this.time_to_complete-this.remaining_time)+"s");
-    
-    if(!this.has_voice && !this.has_sound){
-      this.game.chimes.play();
-      $('#modal-success').fadeIn();
-    }
-    else if(this.has_voice && this.has_sound){
-      this.game.chimes.addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        window.game.puzzle.voice.play();
-      });
-      this.voice.addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        window.game.puzzle.sound.play();
-        $('#modal-success').fadeIn();
-      });
-      this.game.chimes.play();
-    }
-    else if(this.has_voice && !this.has_sound){
-      this.game.chimes.addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        window.game.puzzle.voice.play();
-        $('#modal-success').fadeIn();
-      });
-      this.game.chimes.play();
-    }
-    this.solved = false;
-  }
-  else{
-    
-    if(this.num_pieces > this.game.placed_pieces.length){
-    
-      //HOLDERS
-      for(var i = 0; i < this.holders.length; i++){
-        this.holders[i].draw();
-      }
-    
-      //PIECES
-      var not_placed = new Array();
-      var over = false;
-      for(var i = 0; i < this.pieces.length; i++){
-        piece = this.pieces[i];
-        if(!piece.placed)
-          not_placed.push(piece);
-        else if(piece != this.game.selected)
-          piece.draw();
-      }
-      
-      if(!over){
-        this.game.over = null;
-      }
-    
-      //move
-      if((this.game.selected != null)&&(this.game.selected.moveble)){
-        this.game.selected.x = this.game.mouse.x;
-        this.game.selected.y = this.game.mouse.y;
-      }
-      
-      //NOT PLACED PIECES  
-      for(var i = 0; i < not_placed.length; i++){
-        not_placed[i].draw();
-      }
-      if(this.game.selected)
-        this.game.selected.draw();
-      
-      //move
-      if((this.game.selected != null)&&(this.game.selected.moveble)){
-        this.game.selected.position.x = this.game.mouse.x-this.game.selected.img.width/2;
-        this.game.selected.position.y = this.game.mouse.y-this.game.selected.img.height/2;
-      }
-      
-      //Game Over
-      if(this.remaining_time <= 0){
-        window.m.stopGame();
-        if(confirm('Timeup! Game Over! Wanna try again?')){
-          this.game.is_over = false;
-          this.game.init();
-          window.m.startGame();
-        }
-      }
-      else{
-        if(!this.game.is_over){
-          //console.log(this.num_pieces+" - "+this.game.placed_pieces.length)
-          if(this.num_pieces == this.game.placed_pieces.length){
-            this.game.is_over = true;
-            this.solved = true;
-          }
-        }
-      }
-    
-    }else{
-      this.game.context.drawImage(this.img, (this.game.canvas.width/2)-(this.img.width/2), (this.game.canvas.height/2)-(this.img.height/2));
-      window.m.pauseGame();
-    }
-  
-  }
-
-}

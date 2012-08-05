@@ -487,7 +487,7 @@ window.Modernizr = (function( window, document, undefined ) {
     // Note: "this" is the element.
     var pointers = [];
     if (this.touchList) {
-      console.log('t')
+      //console.log('t')
       for (var i = 0; i < this.touchList.length; i++) {
         var touch = this.touchList[i];
         var pointer = new Pointer(touch.pageX, touch.pageY,
@@ -552,7 +552,7 @@ window.Modernizr = (function( window, document, undefined ) {
   /*************** Touch event handlers *****************/
 
   function touchStartHandler(event) {
-    console.log('touchstart');
+    //console.log('touchstart');
     event.preventDefault();
     setTouch(event);
     var payload = {

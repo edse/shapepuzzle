@@ -65,13 +65,14 @@ Piece.prototype.draw = function() {
     }
     */
     this.game.context.save();
+    //this.game.context.translate(this.game.canvas.width/2, this.game.canvas.height/2)
     this.game.context.globalAlpha = 1;
     this.game.context.beginPath();
-    this.game.context.drawImage(this.img, this.position.x, this.position.y);
+    this.game.context.drawImage(this.img, this.position.x/this.game.scale, this.position.y/this.game.scale);
   }
   else{
     this.game.context.save();
-    
+    //this.game.context.translate(this.game.canvas.width/2, this.game.canvas.height/2)
     if(this.placed)
       this.game.context.globalAlpha = 1
     else if(!this.game.is_over)
@@ -98,9 +99,15 @@ Piece.prototype.draw = function() {
         this.game.selected.moveble = false;
         this.game.placed_pieces.push(this.game.selected);
         //sfx
-        if(this.game.drip.currentTime != 0)
-          this.game.drip.currentTime = 0;
-        this.game.drip.play();
+        if(!window.m.iOS){
+          if(window.m.game.drip.currentTime != 0)
+            window.m.game.drip.currentTime = 0;
+          window.m.game.drip.play();
+        }else{
+          window.m.game.drip.src = "/audio/drip.mp3";
+          window.m.game.drip.play();
+        }
+        //alert('drip')
       }
     }
   

@@ -78,12 +78,28 @@ window.m.stopGame = function() {
 
 }
 window.m.startGame = function() {
+  //IOS
+  window.m.iOS = false;
+  p = navigator.platform;
+  if( p === 'iPad' || p === 'iPhone' || p === 'iPhone Simulator' || p === 'iPod' )
+    window.m.iOS = true;
+  
   gameInterval = setInterval(function() { game.puzzle.remaining_time--; },1000);
   game.started = true;
   //resizeGame();
   window.m.startSFX();
   window.m.startBGM();
   loop();
+  
+  //window.m.game.twang.play();
+  //window.m.game.drip.play();
+  //window.m.game.drip.src = window.m.game.twang.src;
+  //setTimeout("window.m.game.drip.play()",1000)
+  //window.m.game.drip.play();
+  if(window.m.iOS)
+    window.m.game.drip.play();
+
+  
   $('#home').removeClass('active');
   $('#canvas, #canvas_bg, .control').show();
   $('.content, #play, #exitfullscreen, #bgm, #sfx, #autosnap').hide();
@@ -117,10 +133,16 @@ window.m.stopBGM = function() {
   $('#bgm').show();
 }
 window.m.startBGM = function() {
-  window.m.game.bgm.volume = 1.0;
-  window.m.game.bgm.play();
-  $('#bgmoff').show();
-  $('#bgm').hide();
+  if(window.m.iOS){
+    $('#bgmoff').hide();
+    $('#bgm').hide();
+    //alert('ios')
+  }else{
+    window.m.game.bgm.volume = 1.0;
+    window.m.game.bgm.play();
+    $('#bgmoff').show();
+    $('#bgm').hide();
+  }
 }
 window.m.autoSnap = function() {
   window.m.game.auto_snap = true;

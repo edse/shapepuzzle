@@ -11,8 +11,8 @@
  *****/
 function Puzzle(id, game, sound, size, pos, positions) {
   
-  console.log(id)
-  console.log(positions)
+  //console.log(id)
+  //console.log(positions)
   this.pos = pos;
   this.positions = positions;
   this.num_pieces = positions.length;
@@ -31,13 +31,13 @@ function Puzzle(id, game, sound, size, pos, positions) {
   }
   if(size){
     this.width = size.width;
-    this.height = this.height;
+    this.height = size.height;
   }
   this.loadAssets();
 }
 
 Puzzle.prototype.loadAssets = function() {
-  console.log('puzzle start loading...');
+  //console.log('puzzle start loading...');
   //IMAGE
   this.img = new Image();
   this.img.src = "img/"+this.id+"/"+this.id+".png";
@@ -87,15 +87,15 @@ Puzzle.prototype.loadAssets = function() {
 }
 
 Puzzle.prototype.init = function(){
-  console.log('initing puzzle...');
+  //console.log('initing puzzle...');
   clearTimeout(this.iniTimeout);
   this.loaded = true;
   this.solved = false;
 }
 
 Puzzle.prototype.placePiece = function(id, img, holder){
-  x = Math.floor(Math.random()*(this.game.canvas.width-img.width));
-  y = Math.floor(Math.random()*(this.game.canvas.height-img.height));
+  x = Math.floor(Math.random()*(this.game.canvas.width/this.game.scale-img.width));
+  y = Math.floor(Math.random()*(this.game.canvas.height/this.game.scale-img.height));
   temp = new Piece(
     id,
     this.game,
@@ -107,12 +107,19 @@ Puzzle.prototype.placePiece = function(id, img, holder){
     false
   );
   this.pieces.push(temp);
-  console.log('puzzle pieces array length>>'+this.pieces.length);
+  //console.log('puzzle pieces array length>>'+this.pieces.length);
 }
 
 Puzzle.prototype.placeHolder = function(id, img){
-  var x = this.positions[id-1].x+this.pos.x;
-  var y = this.positions[id-1].y+this.pos.y;
+  
+  this.pos.xx = (this.game.canvas.width/this.game.scale)/2-this.width/2; 
+  this.pos.yy = (this.game.canvas.height/this.game.scale)/2-this.height/2; 
+  
+  //var x = this.positions[id-1].x+this.pos.x;
+  //var y = this.positions[id-1].y+this.pos.y;
+  var x = this.positions[id-1].x+this.pos.xx;
+  var y = this.positions[id-1].y+this.pos.yy;
+  //alert('x:'+x+' y:'+y)
   temp = new Holder(
     id,
     this.game,
@@ -121,7 +128,7 @@ Puzzle.prototype.placeHolder = function(id, img){
     false
   );
   this.holders.push(temp);
-  console.log('puzzle holders array length>>'+this.holders.length+' '+temp.position.x+','+temp.position.y);
+  //console.log('puzzle holders array length>>'+this.holders.length+' '+temp.position.x+','+temp.position.y);
   return temp;
 }
 
@@ -130,35 +137,34 @@ Puzzle.prototype.draw = function(){
   if(this.solved){    
     $('#stage').html("Stage "+this.game.stage+" completed!");
     $('#pieces').html(this.num_pieces+" pieces in "+(this.time_to_complete-this.remaining_time)+"s");
-    
-    if(!this.has_voice && !this.has_sound){
-      this.game.chimes.play();
-      $('#modal-success').fadeIn();
-    }
-    else if(this.has_voice && this.has_sound){
-      this.game.chimes.addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        window.game.puzzle.voice.play();
-      });
-      this.voice.addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        window.game.puzzle.sound.play();
-        $('#modal-success').fadeIn();
-      });
-      this.game.chimes.play();
-    }
-    else if(this.has_voice && !this.has_sound){
-      this.game.chimes.addEventListener('ended', function(){
-        this.currentTime = 0;
-        this.pause();
-        window.game.puzzle.voice.play();
-        $('#modal-success').fadeIn();
-      });
-      this.game.chimes.play();
-    }
     this.solved = false;
+    $('#modal-success').fadeIn();
+
+    if(!window.m.iOS){
+      if(this.has_voice && this.has_sound){
+        window.m.game.chimes.addEventListener('ended', function(){
+          this.currentTime = 0;
+          this.pause();
+          window.m.game.puzzle.voice.play();
+        });
+        this.voice.addEventListener('ended', function(){
+          this.currentTime = 0;
+          this.pause();
+          window.m.game.puzzle.sound.play();
+        });
+      }
+      else if(this.has_voice && !this.has_sound){
+        window.m.game.chimes.addEventListener('ended', function(){
+          this.currentTime = 0;
+          this.pause();
+          window.m.game.puzzle.voice.play();
+        });
+      }
+      window.m.game.chimes.play();
+    }else{
+      window.m.game.drip.src = "/audio/chimes.mp3";
+      window.m.game.drip.play();
+    }
   }
   else{
     
@@ -223,7 +229,7 @@ Puzzle.prototype.draw = function(){
       }
     
     }else{
-      this.game.context.drawImage(this.img, (this.game.canvas.width/2)-(this.img.width/2), (this.game.canvas.height/2)-(this.img.height/2));
+      this.game.context.drawImage(this.img, (this.game.canvas.width/this.game.scale/2)-(this.img.width/2), (this.game.canvas.height/this.game.scale/2)-(this.img.height/2));
       window.m.pauseGame();
     }
   
