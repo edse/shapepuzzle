@@ -78,6 +78,8 @@ window.m.stopGame = function() {
 
 }
 window.m.startGame = function() {
+  $('html, body').animate({ scrollTop: 0 }, 'fast');
+  
   //IOS
   window.m.iOS = false;
   p = navigator.platform;

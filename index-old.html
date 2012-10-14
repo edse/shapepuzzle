@@ -16,7 +16,7 @@
   <meta name="author" content="Emerson Estrella">
   <link type="text/plain" rel="author" href="humans.txt" />
 
-  <meta name="viewport" content="width=device-width">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 
   <link rel="stylesheet" href="css/bootstrap.min.css">
   <link rel="stylesheet" href="css/bootstrap-responsive.min.css">
@@ -59,11 +59,17 @@
   <div id="modal-success" class="alert" style="display:none; background-color: white; border-radius: 15px; position:absolute; top:45px; right:5px; z-index: 12; opacity: 0.97">
     <button class="close" onclick="$('#modal-success').fadeOut();">×</button>
     <h4>Yes, you did it!</h4>
-    <div class="span4" style="padding-top: 10px; margin:0;">
+    <div class="span2" style="padding-top: 10px; margin:0;">
       <p><span id="stage" class="label label-success">Stage 1 completed!</span></p>
       <p><span id="pieces" class="label label-warning">4 pieces in 30s</span></p>
       <hr />
-      <a href="#" class="btn btn-primary" id="next">Next Stage</a>
+      <div class="btn-toolbar">
+        <div class="btn-group">
+          <a href="#" class="btn btn-small btn-primary" id="btn_voice">Voice</a>
+          <a href="#" class="btn btn-small btn-primary" id="btn_sound">Sound</a>
+          <a href="#" class="btn btn-small btn-danger" id="next">Next</a>
+        </div>
+      </div>
     </div>
   </div>
   
@@ -86,19 +92,12 @@
 
 
     <div class="container">
+      
 
       <!-- Main hero unit for a primary marketing message or call to action -->
-      <div class="hero-unit content">
+      <div class="hero-unit2 content">
 
-        <div id="promo" class="alert alert-block alert-message fade in">
-          <button class="close" data-dismiss="alert">×</button>
-          <h4 class="alert-heading">HTML5 Video Puzzle</h4>
-          <p>Check this out! Similar puzzle game, but using Youtube videos intead still images.</p>
-          <p>
-            <a class="btn btn-small btn-info" href="http://html5videopuzzle.appspot.com"><i class="icon-info-sign icon-white"></i> More Info</a> <!--<a class="btn" href="#">No, thanks</a>-->
-          </p>
-        </div>
-
+       <div id="promo" class="alert">
         <h1>HTML5 Shape Puzzle</h1>
         <p>I'm using this game for learning some of the "new" HTML5 features:</p>
         <ul>
@@ -114,7 +113,9 @@
         <p><a id="test" class="btn btn-primary btn-danger" href="javascript:;" rel="popover" data-content="Just playing around with HTML5 new features" data-original-title="This is a test">Play &raquo;</a></p>
 
         <p><a href="http://html5videopuzzle.appspot.com">Check this out</a>. It is the same game but using a Youtube video.</p>
-        
+
+       </div>
+
       </div>
 
       <!-- Example row of columns -->
@@ -129,14 +130,117 @@
           <p>Background music and sound effects using the Audio API. Also fullscreen mode support.</p>
           <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
        </div>
-        <div class="span4">
+       <div class="span4">
           <h2>Application Cache / Offline browsing support</h2>
           <p>You can keep playing even when you go offline.</p>
           <!-- <p><a class="btn" href="#">View details &raquo;</a></p> -->
+          
+        <div id="promo" class="alert alert-block alert-message fade in">
+          <button class="close" data-dismiss="alert">×</button>
+          <h4 class="alert-heading">HTML5 Video Puzzle</h4>
+          <p>Check this out! Similar puzzle game, but using Youtube videos intead still images.</p>
+          <p>
+            <a class="btn btn-small btn-info" href="http://html5videopuzzle.appspot.com"><i class="icon-info-sign icon-white"></i> More Info</a> <!--<a class="btn" href="#">No, thanks</a>-->
+          </p>
         </div>
+
+       </div>
       </div>
 
       <hr>
+
+      <div class="row content">
+        <div class="span12" style="text-align: center">
+          <!--banner horizontal-->    
+          <img id="ad" alt="Ad" border="0" />
+          <script>
+            (function() {
+              // Define ads
+              var ads = {
+                leaderboard: {
+                  width: 728,
+                  height: 90,
+                  breakpoint: false,
+                  url: '728x90.png'
+                },
+                rectangle: {
+                  width: 300,
+                  height: 250,
+                  breakpoint: 728,
+                  url: '300x250.png'
+                },
+                mobile: {
+                  width: 300,
+                  height: 50,
+                  breakpoint: 500 ,
+                  url: '300x50.png'
+                }       
+              };
+              
+              /*
+               * The following is quick demo code, a bit poorly abstracted. Please pardon the inelegance.
+               */
+              var slot = document.getElementById('ad'),
+                breakpoints = [],
+                breakbottom, breaktop, mq1, mq2, mq3;
+        
+              function updateAd(unit) {
+                slot.style.width = unit.width + 'px';
+                slot.style.height = unit.height + 'px';
+                slot.src = unit.url;
+                //slot.style.backgroundRepeat = 'no-repeat';
+              }
+                    
+              for (var key in ads) {
+                if (ads.hasOwnProperty(key)) {
+                  if (ads[key]['breakpoint']) {
+                    breakpoints.push(ads[key]['breakpoint']);
+                  }
+                }
+              }
+              
+              breakpoints.sort();
+              breakbottom = breakpoints.shift();
+              breaktop = breakpoints.pop();
+                  
+              mq1 = window.matchMedia("(max-width: " + breakbottom + "px)");
+              mq2 = window.matchMedia("(min-width: " + breakbottom + "px) and (max-width: " + breaktop + "px)");
+              mq3 = window.matchMedia("(min-width: " + breaktop + "px)");
+              
+              // Listen for media changes
+              mq1.addListener(function() { 
+                if (mq1.matches) {
+                  updateAd(ads['mobile']);
+                }
+              });
+              
+              mq2.addListener(function() { 
+                if (mq2.matches) {
+                  updateAd(ads['rectangle']);
+                }
+              });
+              
+              mq3.addListener(function() { 
+                if (mq3.matches) {
+                  updateAd(ads['leaderboard']);
+                }
+              });            
+              
+              // Run query on initial load
+              if (mq1.matches) {
+                updateAd(ads['mobile']);
+              } else if (mq2.matches) {
+                updateAd(ads['rectangle']);
+              } else {
+                updateAd(ads['leaderboard']);
+              }
+            
+            })();
+          </script>
+          <!--banner horizontal-->
+        </div>
+      </div>
+
 
       <footer class="content">
         <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">HTML5 Shape Puzzle</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://html5puzzle.appspot.com" property="cc:attributionName" rel="cc:attributionURL">Emerson Estrella</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="http://html5rocks.com" rel="dct:source">html5rocks.com</a>.
@@ -181,13 +285,6 @@
       </div>
     </div>
     <!-- /DEBUG -->
-    
-    <script type="text/javascript">
-      var _gaq=[['_setAccount','UA-31138932-1'],['_trackPageview']];
-      (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-      s.parentNode.insertBefore(g,s)}(document,'script'));
-    </script>
 
 <script src="js/libs/jquery-1.7.2.min.js"></script>
 <script src="js/libs/bootstrap/bootstrap.min.js"></script>
@@ -201,9 +298,34 @@
   s.parentNode.insertBefore(g,s)}(document,'script'));
 </script>
  -->
- 
+
+<script type="text/javascript">
+  var _gaq=[['_setAccount','UA-31138932-1'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
 <!-- Game scripts -->
-<script src="./js/all.js"></script>
+<script src="./js/mouse.js"></script>
+<script src="./js/point2D.js"></script>
+<script src="./js/piece.js"></script>
+<script src="./js/holder.js"></script>
+<script src="./js/puzzle.js"></script>
+<script src="./js/game.js"></script>
+<script src="./js/init.js"></script>
+
+
+<script type="text/javascript">
+google_ad_client = "ca-pub-6794644097825747";
+/* New Leader */
+google_ad_slot = "5326073161";
+google_ad_width = 728;
+google_ad_height = 90;
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+
 
 </body>
 </html>
