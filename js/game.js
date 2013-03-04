@@ -231,7 +231,16 @@ Game.prototype.init = function(){
       new Point2D(145,209),
       new Point2D(195,281),
       new Point2D(142,280),
-      new Point2D(40,277)))
+      new Point2D(40,277))),
+    new Puzzle("020", this, {has_voice: false, has_sound: false}, {width: 298, height: 400}, new Point2D((this.canvas.width/2-330/2), (this.canvas.height/2-380/2)-5), new Array(
+      new Point2D(0,73),
+      new Point2D(70,8),
+      new Point2D(92,105),
+      new Point2D(258,172),
+      new Point2D(234,278),
+      new Point2D(52,273),
+      new Point2D(204,215),
+      new Point2D(121,214)))
   ];
 
   this.puzzle = this.puzzles[this.stage-1];
@@ -429,6 +438,12 @@ Game.prototype.clockTick = function() {
 */
 Game.prototype.getTimer = function() {
   return (new Date().getTime() - this.start_time); //milliseconds
+}
+
+Game.prototype.restart = function() {
+    this.resized = true;
+    this.init();
+    //this.puzle.init();
 }
 
 Game.prototype.nextStage = function() {

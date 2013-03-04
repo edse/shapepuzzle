@@ -114,6 +114,9 @@ window.m.pauseGame = function() {
   $('#play').show();
   $('.control').hide();  
 }
+window.m.restartGame = function() {
+  window.m.game.restart();
+}
 window.m.stopSFX = function() {
   window.m.game.drip.volume = 0.0;
   window.m.game.twang.volume = 0.0;
@@ -171,6 +174,9 @@ function stop() {
 }
 function pause() {
   window.m.pauseGame();
+}
+function restart() {
+  window.m.restartGame();
 }
 
 function loop() {
